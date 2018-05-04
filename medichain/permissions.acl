@@ -1,13 +1,52 @@
-/**
- * Access Control File for MediChain Network
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
- rule AllAccess {
-     description: "AllAccess - grant everything to everybody."
-     participant: "org.hyperledger.composer.system.Participant"
-     operation: ALL
-     resource: "org.hyperledger.composer.system.**"
-     action: ALLOW
- }
+
+/**
+ * Sample access control list.
+ */
+rule EverybodyCanReadEverything {
+    description: "Allow all participants read access to all resources"
+    participant: "org.medichain.mvp.SampleParticipant"
+    operation: READ
+    resource: "org.medichain.mvp.*"
+    action: ALLOW
+}
+
+rule EverybodyCanSubmitTransactions {
+    description: "Allow all participants to submit transactions"
+    participant: "org.medichain.mvp.SampleParticipant"
+    operation: CREATE
+    resource: "org.medichain.mvp.SampleTransaction"
+    action: ALLOW
+}
+
+rule OwnerHasFullAccessToTheirAssets {
+    description: "Allow all participants full access to their assets"
+    participant(p): "org.medichain.mvp.SampleParticipant"
+    operation: ALL
+    resource(r): "org.medichain.mvp.SampleAsset"
+    condition: (r.owner.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
+rule SystemACL {
+  description:  "System ACL to permit all access"
+  participant: "org.hyperledger.composer.system.Participant"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
 
 rule NetworkAdminUser {
     description: "Grant business network administrators full access to user resources"
@@ -24,6 +63,10 @@ rule NetworkAdminSystem {
     resource: "org.hyperledger.composer.system.**"
     action: ALLOW
 }
+
+/**
+ * Access Control File for MediChain Network
+ */
 
 rule MedicalPractionerCreateDataAccessor {
     description: "Allow medical practitioner to create Data Accessors"
@@ -49,11 +92,20 @@ rule MedicalPractionerRevokeDataPractitioner {
     action: ALLOW
 }
 
-rule OwnRecordFullAccess {
+rule OwnRecordFullAccessPractitioner {
     description: "Allow all participants full access to their own record"
-    participant(p): "org.medichain.mvp.Member"
+    participant(p): "org.medichain.mvp.MedicalPractitioner"
     operation: ALL
-    resource(r): "org.medichain.mvp.Member"
+    resource(r): "org.medichain.mvp.MedicalPractitioner"
+    condition: (r.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
+rule OwnRecordFullAccessDataAccessor {
+    description: "Allow all participants full access to their own record"
+    participant(p): "org.medichain.mvp.DataAccessor"
+    operation: ALL
+    resource(r): "org.medichain.mvp.DataAccessor"
     condition: (r.getIdentifier() === p.getIdentifier())
     action: ALLOW
 }

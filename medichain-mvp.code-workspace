@@ -1,10 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "medichain"
+			"path": "medichain-web"
 		},
 		{
-			"path": "medichain-web"
+			"path": "medichain"
 		}
 	],
 	"settings": {}

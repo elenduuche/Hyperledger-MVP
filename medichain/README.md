@@ -1,3 +1,7 @@
+# medichain
+
+Medichain business network
+
 ## org.medichain.mvp
 
 
