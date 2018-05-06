@@ -18,6 +18,7 @@
 
 namespace composer.base 
 
-abstract participant Member {
-  o String companyName
+abstract participant Member identified by memberId {
+  o String memberId
+  o String userName
 }

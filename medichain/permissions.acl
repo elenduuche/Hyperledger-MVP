@@ -71,34 +71,28 @@ rule NetworkAdminSystem {
 rule MedicalPractionerCreateDataAccessor {
     description: "Allow medical practitioner to create Data Accessors"
     participant: "org.medichain.mvp.MedicalPractitioner"
-    operation: CREATE, UPDATE, READ
+    operation: CREATE, READ, UPDATE
     resource: "org.medichain.mvp.DataAccessor"
     action: ALLOW
 }
 
-rule MedicalPractionerAuthorizeDataPractitioner {
+rule MedicalPractionerGrantOrRevokeDataAccessorAccess {
     description: "Allow medical practitioner to authorize Data Accessors"
-    participant: "org.medichain.mvp.MedicalPractitioner"
-    operation: CREATE, UPDATE
-    resource:  "org.medichain.mvp.GrantAccess"
-    action: ALLOW
+    participant(p): "org.medichain.mvp.MedicalPractitioner"
+    operation: ALL
+    resource(r):  "org.medichain.mvp.Patient"
+    transaction(tx): "org.medichain.mvp.PermissionControl"
+    condition: (r.patientDoctor.getIdentifier() !== p.getIdentifier())
+    action: DENY
 }
 
-rule MedicalPractionerRevokeDataPractitioner {
-    description: "Allow medical practitioner to authorize Data Accessors"
-    participant: "org.medichain.mvp.MedicalPractitioner"
-    operation: CREATE, UPDATE
-    resource:  "org.medichain.mvp.RevokeAccess"
-    action: ALLOW
-}
-
-rule OwnRecordFullAccessPractitioner {
-    description: "Allow all participants full access to their own record"
+rule OwnRecordFullAccessMedicalPractitioner {
+    description: "Allow all medical practitioner full access to their own record"
     participant(p): "org.medichain.mvp.MedicalPractitioner"
     operation: ALL
     resource(r): "org.medichain.mvp.MedicalPractitioner"
-    condition: (r.getIdentifier() === p.getIdentifier())
-    action: ALLOW
+    condition: (r.getIdentifier() !== p.getIdentifier())
+    action: DENY
 }
 
 rule OwnRecordFullAccessDataAccessor {
@@ -106,14 +100,24 @@ rule OwnRecordFullAccessDataAccessor {
     participant(p): "org.medichain.mvp.DataAccessor"
     operation: ALL
     resource(r): "org.medichain.mvp.DataAccessor"
-    condition: (r.getIdentifier() === p.getIdentifier())
-    action: ALLOW
+    condition: (r.getIdentifier() !== p.getIdentifier())
+    action: DENY
 }
 
 rule MedicalPractitionerOp {
-    description: "Allow medical practitioner to update medical practiitoner resource"
-    participant: "org.medichain.mvp.MedicalPractitioner"
+    description: "Allow medical practitioner to update medical practitioner resource"
+    participant(p): "org.medichain.mvp.MedicalPractitioner"
     operation: CREATE, UPDATE, READ
-    resource: "org.medichain.mvp.MedicalPractitioner"
+    resource(r): "org.medichain.mvp.MedicalPractitioner"
+    condition: (r.getIdentifier() == p.getIdentifier())
+    action: ALLOW
+}
+
+rule EnforceAuthorizedAccessRightsForDataAccessor {
+    description: "Allow all participants full access to their own record"
+    participant(p): "org.medichain.mvp.DataAccessor"
+    operation: READ
+    resource(r): "org.medichain.mvp.PatientAsset"
+    condition: (p.authorized.indexOf(r.patientId) > -1 )
     action: ALLOW
 }

@@ -19,7 +19,7 @@
 
 /**
  * Sample transaction
- * @param {org.medichain.mvp.SampleTransaction} sampleTransaction
+ * @param {org.medichain.mvp.SampleTransaction} tx
  * @transaction
  */
 async function sampleTransaction(tx) {
@@ -43,80 +43,177 @@ async function sampleTransaction(tx) {
 }
 
 /******* MEDICHAIN TP FUNCTIONS START HERE ****************** */
+
 /**
- * A medical practicioner GRANTS access to Data Accessors / Other participants
+ * Custom Errors
+ * InvalidParticipantType: "Thrown when the participant if not of type MedicalPractitioner"
+ */
+function InvalidParticipantType(message) {
+    this.name = 'InvalidParticipantType';
+    this.message = (message || '');
+    this.innerError = '';
+}
+InvalidParticipantType.prototype = Error.prototype;
+
+/**
+ * Custom Errors
+ * AlreadyGrantedAccess Error: "Thrown when the DataAccessor has already been granted access"
+ */
+function AlreadyGrantedAccess(message) {
+    this.name = 'AlreadyGrantedAccess';
+    this.message = (message || '');
+    this.innerError = '';
+}
+AlreadyGrantedAccess.prototype = Error.prototype;
+
+/**
+ * Custom Errors
+ * InsufficientRight Error: "Thrown when the Medical Practitioner is not the Practice Doctor of the patient"
+ */
+function InsufficientRight(message) {
+    this.name = 'InsufficientRight';
+    this.message = (message || '');
+    this.innerError = '';
+}
+InsufficientRight.prototype = Error.prototype;
+
+/**
+ * GRANT Access to DataAccessor transaction - A medical practicioner GRANTS access to Data Accessors / Other participants
  * @param {org.medichain.mvp.GrantAccess} grantAccess - the function to grant access
  * @transaction
  */
-
-function GrantAccess(grantAccess) {
-
+async function grantAccess(grantAccess) {
+    //1a Define variables and DataAccessor Registry
     var me = getCurrentParticipant();
+    var dataAccessor = grantAccess.accessorId;
+    const NS = 'org.medichain.mvp';
+    const mpType = 'MedicalPractitioner';
+    const daType = 'DataAccessor';
 
-    console.log('**** AUTH: ' + me.getIdentifier + 'granting access to ' + grantAccess.accessorId)
-
+    //2b Throw Error "A participant/certificate mapping does not exist." is the no participant was found
     if(!me) {
         throw new Error('A participant/certificate mapping does not exist.');
     }
+    //2a Check that the current participant is a "Medical Practitioner"
+    if(me.getType()!=='MedicalPractitioner'){
+        //2c Throw the error "Invalid Participant Type Error"
+        throw new InvalidParticipantType('Expected participant to be type Medical Practitioner');
+    }
 
-    // if the member is not already authorized, we authorize them
-    var index = -1;
-
-    if(!me.authorized) {
-        me.authorized = [];
+    //3a Check that the "DataAccessor" has not been already authorized
+    if(dataAccessor.authorized!==null){
+        let index = dataAccessor.authorized.indexOf(grantAccess.patientId.getIdentifier());
+        //3b Throw "Already Granted Access Error"
+        if(index>-1){
+            throw new AlreadyGrantedAccess('Access already granted to the accessor');
+        }
     }
     else {
-        index = me.authorized.indexOf(grantAccess.accessorId);
+        dataAccessor.authorized = [];
     }
-
-    if(index < 0) {
-        me.authorized.push(grantAccess.accessorId);
-
-        return getParticipantRegistry('org.medichain.mvp.DataAccessor')
-        .then(function (memberRegistry) {
-
-            // emit an event
-            var event = getFactory().newEvent('org.medichain.mvp', 'MemberEvent');
-            event.permissionControl = grantAccess;
-            emit(event);
-
-            // persist the state of the member
-            return memberRegistry.update(me);
-        });
+    if(me.authorized!==null){
+        let index = me.authorized.indexOf(grantAccess.accessorId.getIdentifier());
+        //3b Throw "Already Granted Access Error"
+        if(index>-1){
+            throw new AlreadyGrantedAccess('Access already granted to the accessor');
+        }
     }
+    else {
+        me.authorized = [];
+    }
+    //4a Check that the medical practitioner participant is the medical doctor of the patient
+    if(grantAccess.patientId.patientDoctor.getIdentifier()!== me.$identifier){
+        //4b Throw "Insufficient Right Error"
+        throw new InsufficientRight('Participant is not the Medical Doctor of the patient.');
+    }
+    //5a Add the PatientId to the authorized array of the DataAccessor
+    dataAccessor.authorized.push(grantAccess.patientId.getIdentifier());
+    //6a Add the DataAccessorId to the authorized array of the Medical Practitioner
+    me.authorized.push(grantAccess.accessorId.getIdentifier());
+    //7a Update the Medical Practitioner in the Registry
+    const mpRegistry = await getParticipantRegistry(NS+'.'+mpType);
+    await mpRegistry.update(me);
+    //8a Update the DataAccessor in the Registry
+    const daRegistry = await getParticipantRegistry(NS+'.'+daType);
+    await daRegistry.update(dataAccessor);
+    //9a Emit the MemberAccessPermissionEvent
+    // Emit an event for the modified asset.
+    const factory = getFactory();
+    let event = factory.newEvent(NS, 'MemberAccessPermissionEvent');
+    event.action = 'GRANTED';
+    event.practitionerId = factory.newRelationship(NS, mpType, me.$identifier);
+    event.accessorId = factory.newRelationship(NS, daType, dataAccessor.$identifier);
+    event.patientId = factory.newRelationship(NS, 'Patient', grantAccess.patientId.$identifier);
+    emit(event);
 }
- 
 
 /**
- * A medical practicioner REVOKES access to Data Accessors / Other participants
- * @param {org.medichain.mvp.RevokeAccess} revoke - the RevokeAccess to be processed
+ * REVOKE Access to DataAccessor transaction -A medical practicioner REVOKES access to Data Accessors / Other participants
+ * @param {org.medichain.mvp.RevokeAccess} revokeAccess - the RevokeAccess to be processed
  * @transaction
  */
-function revokeAccess(revoke) {
-
+async function revokeAccess(revokeAccess) {
+    //1a Define variables and DataAccessor Registry
     var me = getCurrentParticipant();
-    console.log('**** REVOKE: ' + me.getIdentifier() + ' revoking access to ' + revoke.accessorId );
+    var dataAccessor = revokeAccess.accessorId;
+    const NS = 'org.medichain.mvp';
+    const mpType = 'MedicalPractitioner';
+    const daType = 'DataAccessor';
 
+    //2b Throw Error "A participant/certificate mapping does not exist." is the no participant was found
     if(!me) {
         throw new Error('A participant/certificate mapping does not exist.');
     }
-
-    // if the member is authorized, we remove them
-    var index = me.authorized ? me.authorized.indexOf(revoke.accessorId) : -1;
-
-    if(index>-1) {
-        me.authorized.splice(index, 1);
-
-        return getParticipantRegistry('org.medichain.mvp.DataAccessor')
-        .then(function (memberRegistry) {
-
-            // emit an event
-            var event = getFactory().newEvent('org.medichain.mvp', 'MemberEvent');
-            event.permissionControl = revoke;
-            emit(event);
-
-            // persist the state of the member
-            return memberRegistry.update(me);
-        });
+    //2a Check that the current participant is a "Medical Practitioner"
+    if(me.getType()!=='MedicalPractitioner'){
+        //2c Throw the error "Invalid Participant Type Error"
+        throw new InvalidParticipantType('Expected participant to be type Medical Practitioner');
     }
+
+    //3a Check that the "DataAccessor" has not been already revoked
+    if(dataAccessor.authorized!==null){
+        let index = dataAccessor.authorized.indexOf(revokeAccess.patientId.getIdentifier());
+        //3b Throw "Already Granted Access Error"
+        if(index===-1){
+            throw new AlreadyGrantedAccess('Access already granted to the accessor');
+        }
+    }
+    else {
+        dataAccessor.authorized = [];
+    }
+    if(me.authorized!==null){
+        let index = me.authorized.indexOf(revokeAccess.accessorId.getIdentifier());
+        //3b Throw "Already Granted Access Error"
+        if(index===-1){
+            throw new AlreadyGrantedAccess('Access already granted to the accessor');
+        }
+    }
+    else {
+        me.authorized = [];
+    }
+    //4a Check that the medical practitioner participant is the medical doctor of the patient
+    if(revokeAccess.patientId.patientDoctor.getIdentifier()!== me.$identifier){
+        //4b Throw "Insufficient Right Error"
+        throw new InsufficientRight('Participant is not the Medical Doctor of the patient.');
+    }
+    //5a Remove the PatientId from the authorized array of the DataAccessor
+    let idx = dataAccessor.authorized.indexOf(revokeAccess.patientId.getIdentifier());
+    dataAccessor.authorized.splice(idx, 1);
+    //6a Remove the DataAccessorId from the authorized array of the Medical Practitioner
+    let idx0 = me.authorized.indexOf(grantAccess.accessorId.getIdentifier());
+    me.authorized.splice(idx0, 1);
+    //7a Update the Medical Practitioner in the Registry
+    const mpRegistry = await getParticipantRegistry(NS+'.'+mpType);
+    await mpRegistry.update(me);
+    //8a Update the DataAccessor in the Registry
+    const daRegistry = await getParticipantRegistry(NS+'.'+daType);
+    await daRegistry.update(dataAccessor);
+    //9a Emit the MemberAccessPermissionEvent
+    const factory = getFactory();
+    let event = factory.newEvent(NS, 'MemberAccessPermissionEvent');
+    event.action = 'REVOKED';
+    event.practitionerId = factory.newRelationship(NS, mpType, me.$identifier);
+    event.accessorId = factory.newRelationship(NS, daType, dataAccessor.$identifier);
+    event.patientId = factory.newRelationship(NS, 'Patient', grantAccess.patientId.$identifier);
+    emit(event);
 }
