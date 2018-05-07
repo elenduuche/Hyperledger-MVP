@@ -76,7 +76,7 @@ rule MedicalPractionerCreateDataAccessor {
     action: ALLOW
 }
 
-rule MedicalPractionerGrantOrRevokeDataAccessorAccess {
+/* rule MedicalPractionerGrantOrRevokeDataAccessorAccess {
     description: "Allow medical practitioner to authorize Data Accessors"
     participant(p): "org.medichain.mvp.MedicalPractitioner"
     operation: ALL
@@ -84,7 +84,7 @@ rule MedicalPractionerGrantOrRevokeDataAccessorAccess {
     transaction(tx): "org.medichain.mvp.PermissionControl"
     condition: (r.patientDoctor.getIdentifier() !== p.getIdentifier())
     action: DENY
-}
+} */
 
 rule OwnRecordFullAccessMedicalPractitioner {
     description: "Allow all medical practitioner full access to their own record"
@@ -119,5 +119,39 @@ rule EnforceAuthorizedAccessRightsForDataAccessor {
     operation: READ
     resource(r): "org.medichain.mvp.PatientAsset"
     condition: (p.authorized.indexOf(r.patientId) > -1 )
+    action: ALLOW
+}
+
+rule MedicalPractitionerCanSubmitTransactions {
+    description: "Allow all participants to submit transactions"
+    participant: "org.medichain.mvp.MedicalPractitioner"
+    operation: CREATE, READ
+    resource: "org.medichain.mvp.GrantAccess"
+    action: ALLOW
+}
+
+rule MedicalPractitionerCanSubmitRevokeTransactions {
+    description: "Allow all participants to submit transactions"
+    participant: "org.medichain.mvp.MedicalPractitioner"
+    operation: CREATE, READ
+    resource: "org.medichain.mvp.RevokeAccess"
+    action: ALLOW
+}
+
+rule MedicalPractitionerReadPatientCanSubmitTransactions {
+    description: "Allow all participants to submit transactions"
+    participant: "org.medichain.mvp.MedicalPractitioner"
+    operation: READ
+    resource: "org.medichain.mvp.Patient"
+    transaction: "org.medichain.mvp.GrantAccess"
+    action: ALLOW
+}
+
+rule MedicalPractitionerReadPatientCanSubmitRevokeTransactions {
+    description: "Allow all participants to submit transactions"
+    participant: "org.medichain.mvp.MedicalPractitioner"
+    operation: READ
+    resource: "org.medichain.mvp.Patient"
+    transaction: "org.medichain.mvp.RevokeAccess"
     action: ALLOW
 }

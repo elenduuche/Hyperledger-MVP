@@ -86,6 +86,7 @@ async function grantAccess(grantAccess) {
     //1a Define variables and DataAccessor Registry
     var me = getCurrentParticipant();
     var dataAccessor = grantAccess.accessorId;
+    var patient = grantAccess.patientId;
     const NS = 'org.medichain.mvp';
     const mpType = 'MedicalPractitioner';
     const daType = 'DataAccessor';
@@ -101,8 +102,8 @@ async function grantAccess(grantAccess) {
     }
 
     //3a Check that the "DataAccessor" has not been already authorized
-    if(dataAccessor.authorized!==null){
-        let index = dataAccessor.authorized.indexOf(grantAccess.patientId.getIdentifier());
+    if(dataAccessor.authorized!==undefined){
+        let index = dataAccessor.authorized.indexOf(patient.getIdentifier());
         //3b Throw "Already Granted Access Error"
         if(index>-1){
             throw new AlreadyGrantedAccess('Access already granted to the accessor');
@@ -111,7 +112,7 @@ async function grantAccess(grantAccess) {
     else {
         dataAccessor.authorized = [];
     }
-    if(me.authorized!==null){
+    if(me.authorized!==undefined){
         let index = me.authorized.indexOf(grantAccess.accessorId.getIdentifier());
         //3b Throw "Already Granted Access Error"
         if(index>-1){
@@ -122,12 +123,12 @@ async function grantAccess(grantAccess) {
         me.authorized = [];
     }
     //4a Check that the medical practitioner participant is the medical doctor of the patient
-    if(grantAccess.patientId.patientDoctor.getIdentifier()!== me.$identifier){
+    if(patient.patientDoctor.getIdentifier()!== me.$identifier){
         //4b Throw "Insufficient Right Error"
         throw new InsufficientRight('Participant is not the Medical Doctor of the patient.');
     }
     //5a Add the PatientId to the authorized array of the DataAccessor
-    dataAccessor.authorized.push(grantAccess.patientId.getIdentifier());
+    dataAccessor.authorized.push(patient.getIdentifier());
     //6a Add the DataAccessorId to the authorized array of the Medical Practitioner
     me.authorized.push(grantAccess.accessorId.getIdentifier());
     //7a Update the Medical Practitioner in the Registry
@@ -156,6 +157,7 @@ async function revokeAccess(revokeAccess) {
     //1a Define variables and DataAccessor Registry
     var me = getCurrentParticipant();
     var dataAccessor = revokeAccess.accessorId;
+    var patient = revokeAccess.patientId;
     const NS = 'org.medichain.mvp';
     const mpType = 'MedicalPractitioner';
     const daType = 'DataAccessor';
@@ -171,7 +173,7 @@ async function revokeAccess(revokeAccess) {
     }
 
     //3a Check that the "DataAccessor" has not been already revoked
-    if(dataAccessor.authorized!==null){
+    if(dataAccessor.authorized!==undefined){
         let index = dataAccessor.authorized.indexOf(revokeAccess.patientId.getIdentifier());
         //3b Throw "Already Granted Access Error"
         if(index===-1){
@@ -181,7 +183,7 @@ async function revokeAccess(revokeAccess) {
     else {
         dataAccessor.authorized = [];
     }
-    if(me.authorized!==null){
+    if(me.authorized!==undefined){
         let index = me.authorized.indexOf(revokeAccess.accessorId.getIdentifier());
         //3b Throw "Already Granted Access Error"
         if(index===-1){
@@ -192,20 +194,24 @@ async function revokeAccess(revokeAccess) {
         me.authorized = [];
     }
     //4a Check that the medical practitioner participant is the medical doctor of the patient
-    if(revokeAccess.patientId.patientDoctor.getIdentifier()!== me.$identifier){
+    if(patient.patientDoctor.$identifier!== me.$identifier){
         //4b Throw "Insufficient Right Error"
         throw new InsufficientRight('Participant is not the Medical Doctor of the patient.');
     }
     //5a Remove the PatientId from the authorized array of the DataAccessor
+    //console.debug('@5a Removing patientId from dataAccessor');
     let idx = dataAccessor.authorized.indexOf(revokeAccess.patientId.getIdentifier());
     dataAccessor.authorized.splice(idx, 1);
     //6a Remove the DataAccessorId from the authorized array of the Medical Practitioner
-    let idx0 = me.authorized.indexOf(grantAccess.accessorId.getIdentifier());
+    //console.debug('@6a Removing accessorId from dataAccessor');
+    let idx0 = me.authorized.indexOf(revokeAccess.accessorId.getIdentifier());
     me.authorized.splice(idx0, 1);
     //7a Update the Medical Practitioner in the Registry
+    //console.debug('@7a Done removing. Now to Update Medical Practitioner in the registry...');
     const mpRegistry = await getParticipantRegistry(NS+'.'+mpType);
     await mpRegistry.update(me);
     //8a Update the DataAccessor in the Registry
+    //console.log('@8a Done removing. Now to Update DataAccessor in the registry...');
     const daRegistry = await getParticipantRegistry(NS+'.'+daType);
     await daRegistry.update(dataAccessor);
     //9a Emit the MemberAccessPermissionEvent
@@ -214,6 +220,6 @@ async function revokeAccess(revokeAccess) {
     event.action = 'REVOKED';
     event.practitionerId = factory.newRelationship(NS, mpType, me.$identifier);
     event.accessorId = factory.newRelationship(NS, daType, dataAccessor.$identifier);
-    event.patientId = factory.newRelationship(NS, 'Patient', grantAccess.patientId.$identifier);
+    event.patientId = factory.newRelationship(NS, 'Patient', revokeAccess.patientId.$identifier);
     emit(event);
 }

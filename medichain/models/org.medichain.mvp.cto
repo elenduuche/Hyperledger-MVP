@@ -106,9 +106,9 @@ enum Disease {
 **Enum for the type of Gender
 **/
 enum Gender {
-  o Male 
-  o Female
-  o Undisclosed
+  o MALE 
+  o FEMALE
+  o UNDISCLOSED
 }
 
 /** 
@@ -138,8 +138,8 @@ participant MedicalPractice identified by practiceId {
 participant MedicalPractitioner extends Member {
   o String firstName
   o String lastName
-  o Integer registrationNumber 
-  o String speciality 
+  o Integer registrationNumber optional
+  o String speciality optional
   o String assistant optional 
   --> MedicalPractice practicionerPlaceOfWork 
   o String[] authorized optional
@@ -159,18 +159,18 @@ asset ProfileInformation identified by patientId extends PatientAsset {
   o String middleName optional
   o String lastName
   o Gender sex 
-  o String source
-  o String facility
-  o String facilityId
-  --> Prescription[] currentPrescriptions
+  o String source optional
+  o String facility optional
+  o String facilityId optional
+  --> Prescription[] currentPrescriptions optional
   //--> ConsultationInformation lastConsultation
-  o DateTime dateOfBirth
+  o DateTime dateOfBirth optional
   o Integer phoneNumber optional
-  o String streetAddress
-  o String city
+  o String streetAddress optional
+  o String city 
   o String state 
   o String country
-  o String zipCode
+  o String zipCode optional
   o String email
   o Integer[] numberOfConsultations optional
 }
