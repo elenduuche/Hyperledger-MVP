@@ -13,6 +13,14 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { UpgradeComponent } from './upgrade/upgrade.component';
 import { LoginComponent } from './login/login.component';
 
+import { ProfileInformationComponent } from './ProfileInformation/ProfileInformation.component';
+import { PatientMasterDataComponent } from './PatientMasterData/PatientMasterData.component';
+import { PrescriptionComponent } from './Prescription/Prescription.component';
+import { ConsultationInformationComponent } from './ConsultationInformation/ConsultationInformation.component';
+import { InsuranceDataComponent } from './InsuranceData/InsuranceData.component';
+import { ImmunizationRecordComponent } from './ImmunizationRecord/ImmunizationRecord.component';
+
+
 const routes: Routes =[
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user-profile',   component: UserProfileComponent },
@@ -23,6 +31,19 @@ const routes: Routes =[
     { path: 'notifications',  component: NotificationsComponent },
     { path: 'upgrade',        component: UpgradeComponent },
     { path: 'login',          component: LoginComponent },
+
+    { path: 'ProfileInformation', component: ProfileInformationComponent},
+		
+		{ path: 'PatientMasterData', component: PatientMasterDataComponent},
+		
+		{ path: 'Prescription', component: PrescriptionComponent},
+		
+		{ path: 'ConsultationInformation', component: ConsultationInformationComponent},
+		
+		{ path: 'InsuranceData', component: InsuranceDataComponent},
+		
+		{ path: 'ImmunizationRecord', component: ImmunizationRecordComponent},
+		
     { path: '',               redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 

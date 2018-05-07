@@ -11,6 +11,17 @@ export const ROUTES: RouteInfo[] = [
     { path: 'dashboard', title: 'Dashboard',  icon: 'dashboard', class: '' },
     { path: 'table-list', title: 'Medical Record',  icon:'content_paste', class: '' },
     { path: 'user-profile', title: 'My Profile',  icon:'person', class: '' },
+    { path: 'ProfileInformation', title: "Profile Information", icon:'content_paste', class: ''},
+		
+    { path: 'PatientMasterData', title: "Patient Master", icon:'content_paste', class: ''},
+    
+    { path: 'Prescription', title: "Prescription", icon:'content_paste', class: ''},
+    
+    { path: 'ConsultationInformation', title: "Consultation Information", icon:'content_paste', class: ''},
+    
+    { path: 'InsuranceData', title: "Insurance Data", icon:'content_paste', class: ''},
+    
+    { path: 'ImmunizationRecord', title: "Immunization Record", icon:'content_paste', class: ''},
     // { path: 'typography', title: 'Typography',  icon:'library_books', class: '' },
     // { path: 'icons', title: 'Icons',  icon:'bubble_chart', class: '' },
     // { path: 'maps', title: 'Maps',  icon:'location_on', class: '' },
