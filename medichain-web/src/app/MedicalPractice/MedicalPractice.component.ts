@@ -1,14 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ImmunizationRecordService } from './ImmunizationRecord.service';
+import { MedicalPracticeService } from './MedicalPractice.service';
 import 'rxjs/add/operator/toPromise';
 @Component({
-	selector: 'app-ImmunizationRecord',
-	templateUrl: './ImmunizationRecord.component.html',
-	styleUrls: ['./ImmunizationRecord.component.css'],
-  providers: [ImmunizationRecordService]
+	selector: 'app-MedicalPractice',
+	templateUrl: './MedicalPractice.component.html',
+	styleUrls: ['./MedicalPractice.component.css'],
+  providers: [MedicalPracticeService]
 })
-export class ImmunizationRecordComponent implements OnInit {
+export class MedicalPracticeComponent implements OnInit {
 
   myForm: FormGroup;
 
@@ -19,11 +19,11 @@ export class ImmunizationRecordComponent implements OnInit {
 
   
       
-          immunizationId = new FormControl("", Validators.required);
+          practiceId = new FormControl("", Validators.required);
         
   
       
-          subTypeOfImmunization = new FormControl("", Validators.required);
+          practiceName = new FormControl("", Validators.required);
         
   
       
@@ -32,11 +32,11 @@ export class ImmunizationRecordComponent implements OnInit {
   
 
 
-  constructor(private serviceImmunizationRecord:ImmunizationRecordService, fb: FormBuilder) {
+  constructor(private serviceMedicalPractice:MedicalPracticeService, fb: FormBuilder) {
     this.myForm = fb.group({
     
         
-          immunizationId:this.immunizationId,
+          practiceId:this.practiceId,
         
     
         
@@ -56,7 +56,7 @@ export class ImmunizationRecordComponent implements OnInit {
 
   loadAll(): Promise<any> {
     let tempList = [];
-    return this.serviceImmunizationRecord.getAll()
+    return this.serviceMedicalPractice.getAll()
     .toPromise()
     .then((result) => {
 			this.errorMessage = null;
@@ -105,10 +105,10 @@ export class ImmunizationRecordComponent implements OnInit {
 
   addAsset(form: any): Promise<any> {
     this.asset = {
-      $class: "org.medichain.mvp.ImmunizationRecord",
+      $class: "org.medichain.mvp.MedicalPractice",
       
         
-          "immunizationId":this.immunizationId.value,
+          "practiceId":this.practiceId.value,
         
       
         
@@ -124,7 +124,7 @@ export class ImmunizationRecordComponent implements OnInit {
     this.myForm.setValue({
       
         
-          "immunizationId":null,
+          "practiceId":null,
         
       
         
@@ -137,14 +137,14 @@ export class ImmunizationRecordComponent implements OnInit {
       
     });
 
-    return this.serviceImmunizationRecord.addAsset(this.asset)
+    return this.serviceMedicalPractice.addAsset(this.asset)
     .toPromise()
     .then(() => {
 			this.errorMessage = null;
       this.myForm.setValue({
       
         
-          "immunizationId":null,
+          "practiceId":null,
         
       
         
@@ -170,7 +170,7 @@ export class ImmunizationRecordComponent implements OnInit {
 
    updateAsset(form: any): Promise<any> {
     this.asset = {
-      $class: "org.medichain.mvp.ImmunizationRecord",
+      $class: "org.medichain.mvp.MedicalPractice",
       
         
           
@@ -190,7 +190,7 @@ export class ImmunizationRecordComponent implements OnInit {
     
     };
 
-    return this.serviceImmunizationRecord.updateAsset(form.get("immunizationId").value,this.asset)
+    return this.serviceMedicalPractice.updateAsset(form.get("practiceId").value,this.asset)
 		.toPromise()
 		.then(() => {
 			this.errorMessage = null;
@@ -211,7 +211,7 @@ export class ImmunizationRecordComponent implements OnInit {
 
   deleteAsset(): Promise<any> {
 
-    return this.serviceImmunizationRecord.deleteAsset(this.currentId)
+    return this.serviceMedicalPractice.deleteAsset(this.currentId)
 		.toPromise()
 		.then(() => {
 			this.errorMessage = null;
@@ -235,14 +235,14 @@ export class ImmunizationRecordComponent implements OnInit {
 
   getForm(id: any): Promise<any>{
 
-    return this.serviceImmunizationRecord.getAsset(id)
+    return this.serviceMedicalPractice.getAsset(id)
     .toPromise()
     .then((result) => {
 			this.errorMessage = null;
       let formObject = {
         
           
-            "immunizationId":null,
+            "practiceId":null,
           
         
           
@@ -258,20 +258,20 @@ export class ImmunizationRecordComponent implements OnInit {
 
 
       
-        if(result.immunizationId){
+        if(result.practiceId){
           
-            formObject.immunizationId = result.immunizationId;
+            formObject.practiceId = result.practiceId;
           
         }else{
-          formObject.immunizationId = null;
+          formObject.practiceId = null;
         }
       
-        if(result.subTypeOfImmunization){
+        if(result.practiceName){
           
-            formObject.subTypeOfImmunization = result.subTypeOfImmunization;
+            formObject.practiceName = result.practiceName;
           
         }else{
-          formObject.subTypeOfImmunization = null;
+          formObject.practiceName = null;
         }
       
         if(result.dateOfImmunization){
@@ -304,7 +304,7 @@ export class ImmunizationRecordComponent implements OnInit {
     this.myForm.setValue({
       
         
-          "immunizationId":null,
+          "practiceId":null,
         
       
         

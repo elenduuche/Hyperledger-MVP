@@ -7,28 +7,28 @@ import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Configuration } from '../configuration';
 import { DataService } from '../data.service';
-import { ImmunizationRecordComponent } from './ImmunizationRecord.component';
-import {ImmunizationRecordService} from './ImmunizationRecord.service';
-describe('ImmunizationRecordComponent', () => {
-  let component: ImmunizationRecordComponent;
-  let fixture: ComponentFixture<ImmunizationRecordComponent>;
+import { MedicalPracticeComponent } from './MedicalPractice.component';
+import {MedicalPracticeService} from './MedicalPractice.service';
+describe('MedicalPracticeComponent', () => {
+  let component: MedicalPracticeComponent;
+  let fixture: ComponentFixture<MedicalPracticeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImmunizationRecordComponent ],
+      declarations: [ MedicalPracticeComponent ],
 imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule
   ],
-providers: [ImmunizationRecordService,DataService,Configuration]
+providers: [MedicalPracticeService,DataService,Configuration]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ImmunizationRecordComponent);
+    fixture = TestBed.createComponent(MedicalPracticeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
