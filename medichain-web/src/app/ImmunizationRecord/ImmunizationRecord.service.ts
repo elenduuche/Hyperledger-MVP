@@ -9,7 +9,7 @@ import 'rxjs/Rx';
 export class ImmunizationRecordService {
 
 	
-		private NAMESPACE: string = 'ImmunizationRecord';
+		private NAMESPACE: string = 'org.medichain.mvp.ImmunizationRecord';
 	
 
 

@@ -9,7 +9,7 @@ import 'rxjs/Rx';
 export class PrescriptionService {
 
 	
-		private NAMESPACE: string = 'Prescription';
+		private NAMESPACE: string = 'org.medichain.mvp.Prescription';
 	
 
 
