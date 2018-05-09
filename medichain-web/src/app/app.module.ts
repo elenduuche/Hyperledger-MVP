@@ -37,7 +37,7 @@ import { ConsultationInformationComponent } from './ConsultationInformation/Cons
 import { InsuranceDataComponent } from './InsuranceData/InsuranceData.component';
 import { ImmunizationRecordComponent } from './ImmunizationRecord/ImmunizationRecord.component';
 import { MedicalPracticeComponent } from './MedicalPractice/MedicalPractice.component';
-
+import { MedicalPractitionerComponent } from './MedicalPractitioner/MedicalPractitioner.component';
 
 
 import {
@@ -79,6 +79,7 @@ import {
 		InsuranceDataComponent,
     ImmunizationRecordComponent,
     MedicalPracticeComponent,
+    MedicalPractitionerComponent,
 
   ],
   providers: [

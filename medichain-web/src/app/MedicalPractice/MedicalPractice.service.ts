@@ -12,8 +12,6 @@ export class MedicalPracticeService {
 		private NAMESPACE: string = 'org.medichain.mvp.MedicalPractice';
 	
 
-
-
     constructor(private dataService: DataService<MedicalPractice>) {
     };
 

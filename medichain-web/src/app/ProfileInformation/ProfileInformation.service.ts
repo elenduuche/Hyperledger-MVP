@@ -9,7 +9,7 @@ import 'rxjs/Rx';
 export class ProfileInformationService {
 
 	
-		private NAMESPACE: string = 'ProfileInformation';
+		private NAMESPACE: string = 'org.medichain.mvp.ProfileInformation';
 	
 
 

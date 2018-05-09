@@ -21,30 +21,19 @@ export class MedicalPracticeComponent implements OnInit {
       
           practiceId = new FormControl("", Validators.required);
         
-  
-      
           practiceName = new FormControl("", Validators.required);
         
-  
-      
-          dateOfImmunization = new FormControl("", Validators.required);
-        
-  
-
+          practiceRegistrationNumber = new FormControl("", Validators.required);
 
   constructor(private serviceMedicalPractice:MedicalPracticeService, fb: FormBuilder) {
     this.myForm = fb.group({
     
         
           practiceId:this.practiceId,
+      
+          practiceName:this.practiceName,
         
-    
-        
-          subTypeOfImmunization:this.subTypeOfImmunization,
-        
-    
-        
-          dateOfImmunization:this.dateOfImmunization
+          practiceRegistrationNumber:this.practiceRegistrationNumber
         
     
     });
@@ -108,15 +97,15 @@ export class MedicalPracticeComponent implements OnInit {
       $class: "org.medichain.mvp.MedicalPractice",
       
         
-          "practiceId":this.practiceId.value,
+          "practiceId": Math.floor((Math.random() * 100) + 1),
         
       
         
-          "subTypeOfImmunization":this.subTypeOfImmunization.value,
+          "practiceName":this.practiceName.value,
         
       
         
-          "dateOfImmunization":this.dateOfImmunization.value
+          "practiceRegistrationNumber":this.practiceRegistrationNumber.value
         
       
     };
@@ -128,11 +117,11 @@ export class MedicalPracticeComponent implements OnInit {
         
       
         
-          "subTypeOfImmunization":null,
+          "practiceName":null,
         
       
         
-          "dateOfImmunization":null
+          "practiceRegistrationNumber":null
         
       
     });
@@ -143,25 +132,22 @@ export class MedicalPracticeComponent implements OnInit {
 			this.errorMessage = null;
       this.myForm.setValue({
       
-        
           "practiceId":null,
         
-      
+          "practiceName":null,
         
-          "subTypeOfImmunization":null,
-        
-      
-        
-          "dateOfImmunization":null 
+          "practiceRegistrationNumber":null 
         
       
       });
+      this.loadAll();
     })
     .catch((error) => {
         if(error == 'Server error'){
             this.errorMessage = "Could not connect to REST server. Please check your configuration details";
         }
         else{
+
             this.errorMessage = error;
         }
     });
@@ -171,29 +157,17 @@ export class MedicalPracticeComponent implements OnInit {
    updateAsset(form: any): Promise<any> {
     this.asset = {
       $class: "org.medichain.mvp.MedicalPractice",
-      
-        
+
+            "practiceName":this.practiceName.value,
           
-        
-    
-        
-          
-            "subTypeOfImmunization":this.subTypeOfImmunization.value,
-          
-        
-    
-        
-          
-            "dateOfImmunization":this.dateOfImmunization.value
-          
-        
-    
+            "practiceRegistrationNumber":this.practiceRegistrationNumber.value
     };
 
     return this.serviceMedicalPractice.updateAsset(form.get("practiceId").value,this.asset)
 		.toPromise()
 		.then(() => {
-			this.errorMessage = null;
+      this.errorMessage = null;
+      this.loadAll();
 		})
 		.catch((error) => {
             if(error == 'Server error'){
@@ -214,7 +188,8 @@ export class MedicalPracticeComponent implements OnInit {
     return this.serviceMedicalPractice.deleteAsset(this.currentId)
 		.toPromise()
 		.then(() => {
-			this.errorMessage = null;
+      this.errorMessage = null;
+      this.loadAll();
 		})
 		.catch((error) => {
             if(error == 'Server error'){
@@ -246,11 +221,11 @@ export class MedicalPracticeComponent implements OnInit {
           
         
           
-            "subTypeOfImmunization":null,
+            "practiceName":null,
           
         
           
-            "dateOfImmunization":null 
+            "practiceRegistrationNumber":null 
           
         
       };
@@ -274,17 +249,17 @@ export class MedicalPracticeComponent implements OnInit {
           formObject.practiceName = null;
         }
       
-        if(result.dateOfImmunization){
+        if(result.practiceRegistrationNumber){
           
-            formObject.dateOfImmunization = result.dateOfImmunization;
+            formObject.practiceRegistrationNumber = result.practiceRegistrationNumber;
           
         }else{
-          formObject.dateOfImmunization = null;
+          formObject.practiceRegistrationNumber = null;
         }
       
 
       this.myForm.setValue(formObject);
-
+      
     })
     .catch((error) => {
         if(error == 'Server error'){
@@ -306,13 +281,9 @@ export class MedicalPracticeComponent implements OnInit {
         
           "practiceId":null,
         
-      
-        
-          "subTypeOfImmunization":null,
-        
-      
-        
-          "dateOfImmunization":null 
+          "practiceName":null,
+
+          "practiceRegistrationNumber":null 
         
       
       });

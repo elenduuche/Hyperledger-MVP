@@ -19,31 +19,25 @@ import { PrescriptionComponent } from './Prescription/Prescription.component';
 import { ConsultationInformationComponent } from './ConsultationInformation/ConsultationInformation.component';
 import { InsuranceDataComponent } from './InsuranceData/InsuranceData.component';
 import { ImmunizationRecordComponent } from './ImmunizationRecord/ImmunizationRecord.component';
+import { MedicalPracticeComponent } from './MedicalPractice/MedicalPractice.component';
+import { MedicalPractitionerComponent } from './MedicalPractitioner/MedicalPractitioner.component';
 
 
 const routes: Routes =[
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
-    { path: 'typography',     component: TypographyComponent },
-    { path: 'icons',          component: IconsComponent },
-    { path: 'maps',           component: MapsComponent },
     { path: 'notifications',  component: NotificationsComponent },
     { path: 'upgrade',        component: UpgradeComponent },
     { path: 'login',          component: LoginComponent },
-
     { path: 'ProfileInformation', component: ProfileInformationComponent},
-		
 		{ path: 'PatientMasterData', component: PatientMasterDataComponent},
-		
 		{ path: 'Prescription', component: PrescriptionComponent},
-		
 		{ path: 'ConsultationInformation', component: ConsultationInformationComponent},
-		
 		{ path: 'InsuranceData', component: InsuranceDataComponent},
-		
-		{ path: 'ImmunizationRecord', component: ImmunizationRecordComponent},
-		
+    { path: 'ImmunizationRecord', component: ImmunizationRecordComponent},
+    { path: 'MedicalPractice', component: MedicalPracticeComponent},	
+    { path: 'MedicalPractitioner', component: MedicalPractitionerComponent},
     { path: '',               redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 

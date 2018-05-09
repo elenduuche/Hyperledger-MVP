@@ -8,38 +8,19 @@
       <form [formGroup]="myForm">
         <div class="modal-body">
 
-
-          
-
-            
               <div class="form-group text-left">
-                <label for="immunizationId">immunizationId</label>
+                <label for="practiceName">practiceName</label>
                 
-                  <input formControlName="immunizationId" type="text" class="form-control">
+                  <input formControlName="practiceName" type="text" class="form-control">
                 
               </div>
             
-          
-
-            
               <div class="form-group text-left">
-                <label for="subTypeOfImmunization">subTypeOfImmunization</label>
+                <label for="practiceRegistrationNumber">practiceRegistrationNumber</label>
                 
-                  <input formControlName="subTypeOfImmunization" type="text" class="form-control">
+                  <input formControlName="practiceRegistrationNumber" type="number" class="form-control">
                 
               </div>
-            
-          
-
-            
-              <div class="form-group text-left">
-                <label for="dateOfImmunization">dateOfImmunization</label>
-                
-                  <input formControlName="dateOfImmunization" type="text" class="form-control">
-                
-              </div>
-            
-          
 
         </div>
         <div class="modal-footer">
@@ -64,32 +45,18 @@
       <form [formGroup]="myForm">
         <div class="modal-body">
 
-
           
             <div class="form-group text-left">
-              <label for="immunizationId">immunizationId</label>
+              <label for="practiceName">practiceName</label>
 
-              
-                <input [ngModel]="immunizationId"formControlName="immunizationId" type="text" class="form-control">
-              
+                <input [ngModel]="practiceName"formControlName="practiceName" type="text" class="form-control">
 
             </div>
           
             <div class="form-group text-left">
-              <label for="subTypeOfImmunization">subTypeOfImmunization</label>
+              <label for="practiceRegistrationNumber">practiceRegistrationNumber</label>
 
-              
-                <input [ngModel]="subTypeOfImmunization"formControlName="subTypeOfImmunization" type="text" class="form-control">
-              
-
-            </div>
-          
-            <div class="form-group text-left">
-              <label for="dateOfImmunization">dateOfImmunization</label>
-
-              
-                <input [ngModel]="dateOfImmunization"formControlName="dateOfImmunization" type="text" class="form-control">
-              
+                <input [ngModel]="practiceRegistrationNumber"formControlName="practiceRegistrationNumber" type="text" class="form-control">
 
             </div>
           
@@ -141,7 +108,7 @@
 	<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
 		<strong>Error:</strong> {{errorMessage}}
 	</div>
-  <h1 id='assetName'>ImmunizationRecord</h1>
+  <h1 id='assetName'>Medical Practice</h1>
   <div class="row">
     <div class="col-md-12 text-right">
       <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
@@ -154,11 +121,11 @@
         <thead class="thead">
           <tr class="thead-cols">
             
-                <th class="info">immunizationId</th>
+                <th class="info">practiceId</th>
             
-                <th class="info">subTypeOfImmunization</th>
+                <th class="info">practiceName</th>
             
-                <th class="info">dateOfImmunization</th>
+                <th class="info">practiceRegistrationNumber</th>
             
               <th class="info">Actions</th>
           </tr>
@@ -167,16 +134,16 @@
           <tr *ngFor="let asset of allAssets">
 
             
-                <td>{{asset.immunizationId}}</td>
+                <td>{{asset.practiceId}}</td>
             
-                <td>{{asset.subTypeOfImmunization}}</td>
+                <td>{{asset.practiceName}}</td>
             
-                <td>{{asset.dateOfImmunization}}</td>
+                <td>{{asset.practiceRegistrationNumber}}</td>
             
             <td>
-              <button (click)="getForm(asset.immunizationId);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update Asset</button>
+              <button (click)="getForm(asset.practiceId);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update Asset</button>
 
-              <button (click)="setId(asset.immunizationId);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAssetModal">Delete Asset</button>
+              <button (click)="setId(asset.practiceId);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAssetModal">Delete Asset</button>
             </td>
           </tr>
         </tbody>
