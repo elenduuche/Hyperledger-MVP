@@ -1,22 +1,84 @@
+<div class="main-content">
+    <div class="container-fluid">
+  
+        <div class="row">
+            <div class="col-md-12 text-right">
+              <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
+            </div>
+          </div>
+           <div class="row">
+             
+              <div class="col-md-12">
+                  <div class="card">
+                      <div class="card-header card-header-danger">
+                          <h4 class="card-title ">Medical Practice</h4>
+                          <p class="card-category"> All available medical practice record
+                          </p>
+                          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+                              <strong>Error:</strong> {{errorMessage}}
+                            </div> 
+                      </div>
+                      <div class="card-body">
+                          <div class="table-responsive">
+                              <table class="table">
+                                  <thead class="thead">
+                                      <tr class="thead-cols">
+                                        
+                                            <th class="info">practiceId</th>
+                                        
+                                            <th class="info">practiceName</th>
+                                        
+                                            <th class="info">practiceRegistrationNumber</th>
+                                        
+                                          <th class="info">Actions</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr *ngFor="let asset of allAssets">
+                            
+                                        
+                                            <td>{{asset.practiceId}}</td>
+                                        
+                                            <td>{{asset.practiceName}}</td>
+                                        
+                                            <td>{{asset.practiceRegistrationNumber}}</td>
+                                        
+                                        <td>
+                                          <button (click)="getForm(asset.practiceId);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update Asset</button>
+                            
+                                          <button (click)="setId(asset.practiceId);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAssetModal">Delete Asset</button>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+  
+                          </div>
+                      </div>
+                  </div>
+              </div>
+    
+          </div>
+
+
 <div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="addAssetModalLabel">Add</h4>
+        <h4 class="modal-title" id="addAssetModalLabel">Add Asset</h4>
       </div>
       <form [formGroup]="myForm">
         <div class="modal-body">
 
               <div class="form-group text-left">
-                <label for="practiceName">Practice Name</label>
+                <label for="practiceName">practiceName</label>
                 
                   <input formControlName="practiceName" type="text" class="form-control">
                 
               </div>
             
               <div class="form-group text-left">
-                <label for="practiceRegistrationNumber">Registration Number</label>
+                <label for="practiceRegistrationNumber">practiceRegistrationNumber</label>
                 
                   <input formControlName="practiceRegistrationNumber" type="number" class="form-control">
                 
@@ -40,21 +102,21 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="updateAssetModalLabel">Update</h4>
+        <h4 class="modal-title" id="updateAssetModalLabel">Update Asset</h4>
       </div>
       <form [formGroup]="myForm">
         <div class="modal-body">
 
           
             <div class="form-group text-left">
-              <label for="practiceName">Practice Name</label>
+              <label for="practiceName">practiceName</label>
 
                 <input [ngModel]="practiceName"formControlName="practiceName" type="text" class="form-control">
 
             </div>
           
             <div class="form-group text-left">
-              <label for="practiceRegistrationNumber">Registration Number</label>
+              <label for="practiceRegistrationNumber">practiceRegistrationNumber</label>
 
                 <input [ngModel]="practiceRegistrationNumber"formControlName="practiceRegistrationNumber" type="text" class="form-control">
 
@@ -95,51 +157,5 @@
 </div>
 
 
-<div class="container">
-	<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-		<strong>Error:</strong> {{errorMessage}}
-	</div>
-  <h1 id='assetName' class='card-title' >Medical Practice</h1>
-  <p class="card-category"> All available medical practices</p>
-  <div class="row">
-    <div class="col-md-12 text-right">
-      <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add</button>
-    </div>
-  </div>
-  <br>
-  <div class="row">
-    <div class="col-md-12">
-      <table class="table table-bordered table-responsive table-striped">
-        <thead class="thead">
-          <tr class="thead-cols">
-            
-                <th class="info">Practice ID</th>
-            
-                <th class="info">Practice Name</th>
-            
-                <th class="info">Registration Number</th>
-            
-              <th class="info">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let asset of allAssets">
-
-            
-                <td>{{asset.practiceId}}</td>
-            
-                <td>{{asset.practiceName}}</td>
-            
-                <td>{{asset.practiceRegistrationNumber}}</td>
-            
-            <td>
-              <button (click)="getForm(asset.practiceId);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update Asset</button>
-
-              <button (click)="setId(asset.practiceId);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAssetModal">Delete Asset</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+ </div>
 </div>
