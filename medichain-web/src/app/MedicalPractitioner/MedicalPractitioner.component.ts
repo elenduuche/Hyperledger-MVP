@@ -204,7 +204,7 @@ export class MedicalPractitionerComponent implements OnInit {
         }
     });
   
-    localStorage.clear();
+    //localStorage.clear();
   }
 
 
