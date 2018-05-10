@@ -19,23 +19,19 @@ export class MedicalPractitionerComponent implements OnInit {
 
   
       
-          firstName = new FormControl("", Validators.required);
-        
-          lastName = new FormControl("", Validators.required);
-        
-          userName = new FormControl("", Validators.required);
+  firstName = new FormControl("", Validators.required);
+  lastName = new FormControl("", Validators.required);
+  userName = new FormControl("", Validators.required);
+  registrationNumber = new FormControl("", Validators.required);
+  practicionerPlaceOfWork = new FormControl("", Validators.required);
 
   constructor(private serviceMedicalPractitioner:MedicalPractitionerService, fb: FormBuilder) {
     this.myForm = fb.group({
-    
-        
           firstName:this.firstName,
-      
           lastName:this.lastName,
-        
-          userName:this.userName
-        
-    
+          userName:this.userName,
+          registrationNumber: this.registrationNumber,
+          practicionerPlaceOfWork: this.practicionerPlaceOfWork
     });
   };
 
@@ -95,35 +91,19 @@ export class MedicalPractitionerComponent implements OnInit {
   addAsset(form: any): Promise<any> {
     this.asset = {
       $class: "org.medichain.mvp.MedicalPractitioner",
-      
-        
           "firstName": this.firstName.value,
-        
-      
-        
           "lastName":this.lastName.value,
-        
-      
-        
-          "userName":this.userName.value
-        
-      
+          "userName":this.userName.value,
+          "registrationNumber": this.registrationNumber.value,
+          "practicionerPlaceOfWork": this.practicionerPlaceOfWork.value
     };
 
     this.myForm.setValue({
-      
-        
           "firstName":null,
-        
-      
-        
           "lastName":null,
-        
-      
-        
-          "userName":null
-        
-      
+          "userName":null,
+          "registrationNumber":null,
+          "practicionerPlaceOfWork":null
     });
 
     return this.serviceMedicalPractitioner.addAsset(this.asset)

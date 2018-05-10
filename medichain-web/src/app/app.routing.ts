@@ -10,7 +10,7 @@ import { TypographyComponent } from './typography/typography.component';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-import { UpgradeComponent } from './upgrade/upgrade.component';
+// import { UpgradeComponent } from './upgrade/upgrade.component';
 import { LoginComponent } from './login/login.component';
 
 import { ProfileInformationComponent } from './ProfileInformation/ProfileInformation.component';
@@ -28,7 +28,7 @@ const routes: Routes =[
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'notifications',  component: NotificationsComponent },
-    { path: 'upgrade',        component: UpgradeComponent },
+    // { path: 'upgrade',        component: UpgradeComponent },
     { path: 'login',          component: LoginComponent },
     { path: 'ProfileInformation', component: ProfileInformationComponent},
 		{ path: 'PatientMasterData', component: PatientMasterDataComponent},

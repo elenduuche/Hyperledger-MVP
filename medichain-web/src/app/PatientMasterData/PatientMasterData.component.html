@@ -1,4 +1,4 @@
-<div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel">
+<!-- <div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -7,11 +7,6 @@
       </div>
       <form [formGroup]="myForm">
         <div class="modal-body">
-
-
-          
-
-            
               <div class="form-group text-left">
                 <label for="masterDataId">masterDataId</label>
                 
@@ -70,11 +65,9 @@
     </div>
   </div>
 </div>
+ -->
 
-
-
-
-<div class="modal fade" id="updateAssetModal" tabindex="-1" role="dialog" aria-labelledby="updateAssetModalLabel">
+<!-- <div class="modal fade" id="updateAssetModal" tabindex="-1" role="dialog" aria-labelledby="updateAssetModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -149,11 +142,9 @@
       </form>
     </div>
   </div>
-</div>
+</div> -->
 
-
-
-<div class="modal fade" id="deleteAssetModal" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLabel">
+<!-- <div class="modal fade" id="deleteAssetModal" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -171,28 +162,19 @@
       </form>
     </div>
   </div>
-</div>
-
-
-
-
-
-
-
-
-
-
+</div> -->
 
 <div class="container">
 	<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
 		<strong>Error:</strong> {{errorMessage}}
 	</div>
   <h1 id='assetName'>Patient Master Data</h1>
-  <div class="row">
+  <p class="card-category"> Master Data summary of all accessible patient</p>
+  <!-- <div class="row">
     <div class="col-md-12 text-right">
       <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
     </div>
-  </div>
+  </div> -->
   <br>
   <div class="row">
     <div class="col-md-12">
@@ -200,15 +182,15 @@
         <thead class="thead">
           <tr class="thead-cols">
             
-                <th class="info">masterDataId</th>
+                <th class="info">Patient Id</th>
             
-                <th class="info">patientPrescriptions</th>
+                <th class="info">Prescriptions</th>
             
-                <th class="info">patientImmunizationHistory</th>
+                <th class="info">Immunizations</th>
             
-                <th class="info">patientConsultationHistory</th>
+                <th class="info">Consultations</th>
             
-                <th class="info">patientInsuranceInfo</th>
+                <th class="info">Insurance Detail</th>
             
               <th class="info">Actions</th>
           </tr>
@@ -217,7 +199,7 @@
           <tr *ngFor="let asset of allAssets">
 
             
-                <td>{{asset.masterDataId}}</td>
+                <td>{{asset.patientId}}</td>
             
                 <td>{{asset.patientPrescriptions}}</td>
             

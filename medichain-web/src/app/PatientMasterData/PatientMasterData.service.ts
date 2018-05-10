@@ -9,11 +9,8 @@ import 'rxjs/Rx';
 export class PatientMasterDataService {
 
 	
-		private NAMESPACE: string = 'PatientMasterData';
+		private NAMESPACE: string = 'org.medichain.mvp.PatientMasterData';
 	
-
-
-
     constructor(private dataService: DataService<PatientMasterData>) {
     };
 

@@ -69,7 +69,7 @@ import { Member } from './composer.base';
       practiceRegistrationNumber: number;
    }
    export class MedicalPractitioner extends Member {
-      practitionerId: string;
+      memberId: string;
       userName: string;
       firstName: string;
       lastName: string;
@@ -107,11 +107,11 @@ import { Member } from './composer.base';
       numberOfConsultations: number[];
    }
    export class PatientMasterData extends Asset {
-      masterDataId: string;
+      patientId: string;
       patientPrescriptions: Prescription[];
       patientImmunizationHistory: ImmunizationRecord[];
-      patientConsultationHistory: ConsultationInformation;
-      patientInsuranceInfo: InsuranceData;
+      patientConsultationHistory: ConsultationInformation[];
+      patientInsuranceInfo: InsuranceData[];
    }
    export class Prescription extends Asset {
       prescriptionId: string;
