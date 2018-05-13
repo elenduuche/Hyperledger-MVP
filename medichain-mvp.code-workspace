@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "medichain"
+		},
+		{
+			"path": "medichain-restserver"
 		}
 	],
 	"settings": {}
