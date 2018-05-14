@@ -9,7 +9,7 @@ services:
       - 3000:3000
     environment:
       - COMPOSER_CARD=admin@medichain
-      - COMPOSER_NAMESPACES=always
+      - COMPOSER_NAMESPACES=never
       - COMPOSER_AUTHENTICATION=true
       - COMPOSER_MULTIUSER=true
       - COMPOSER_PROVIDERS='{
