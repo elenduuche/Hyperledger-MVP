@@ -4,6 +4,7 @@ import {Transaction} from './org.hyperledger.composer.system';
 import {Event} from './org.hyperledger.composer.system';
 // export namespace composer.base{
    export abstract class Member extends Participant {
-      companyName: string;
+      memberId: string;
+      userName: string;
    }
 // }

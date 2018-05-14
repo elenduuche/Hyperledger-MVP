@@ -1,39 +1,35 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { PatientMasterData } from '../org.medichain.mvp';
+import { Patient } from '../org.medichain.mvp';
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
 @Injectable()
-export class PatientMasterDataService {
-
-	
-		private NAMESPACE: string = 'PatientMasterData';
-	
+export class PatientService {
 
 
-
-    constructor(private dataService: DataService<PatientMasterData>) {
+    private NAMESPACE: string = 'org.medichain.mvp.Patient';
+    constructor(private dataService: DataService<Patient>) {
     };
 
-    public getAll(): Observable<PatientMasterData[]> {
+    public getAll(): Observable<Patient[]> {
         return this.dataService.getAll(this.NAMESPACE);
     }
 
-    public getAsset(id: any): Observable<PatientMasterData> {
+    public getAsset(id: any): Observable<Patient> {
       return this.dataService.getSingle(this.NAMESPACE, id);
     }
 
-    public addAsset(itemToAdd: any): Observable<PatientMasterData> {
+    public addAsset(itemToAdd: any): Observable<Patient> {
       return this.dataService.add(this.NAMESPACE, itemToAdd);
     }
 
-    public updateAsset(id: any, itemToUpdate: any): Observable<PatientMasterData> {
+    public updateAsset(id: any, itemToUpdate: any): Observable<Patient> {
       return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
     }
 
-    public deleteAsset(id: any): Observable<PatientMasterData> {
+    public deleteAsset(id: any): Observable<Patient> {
       return this.dataService.delete(this.NAMESPACE, id);
     }
 

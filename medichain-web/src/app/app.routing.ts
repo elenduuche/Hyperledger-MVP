@@ -10,7 +10,7 @@ import { TypographyComponent } from './typography/typography.component';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-// import { UpgradeComponent } from './upgrade/upgrade.component';
+import { UpgradeComponent } from './upgrade/upgrade.component';
 import { LoginComponent } from './login/login.component';
 
 import { ProfileInformationComponent } from './ProfileInformation/ProfileInformation.component';
@@ -21,6 +21,7 @@ import { InsuranceDataComponent } from './InsuranceData/InsuranceData.component'
 import { ImmunizationRecordComponent } from './ImmunizationRecord/ImmunizationRecord.component';
 import { MedicalPracticeComponent } from './MedicalPractice/MedicalPractice.component';
 import { MedicalPractitionerComponent } from './MedicalPractitioner/MedicalPractitioner.component';
+import { DataAccessorComponent } from './DataAccessor/DataAccessor.component';
 
 
 const routes: Routes =[
@@ -28,7 +29,7 @@ const routes: Routes =[
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'notifications',  component: NotificationsComponent },
-    // { path: 'upgrade',        component: UpgradeComponent },
+    { path: 'upgrade',        component: UpgradeComponent },
     { path: 'login',          component: LoginComponent },
     { path: 'ProfileInformation', component: ProfileInformationComponent},
 		{ path: 'PatientMasterData', component: PatientMasterDataComponent},
@@ -36,8 +37,9 @@ const routes: Routes =[
 		{ path: 'ConsultationInformation', component: ConsultationInformationComponent},
 		{ path: 'InsuranceData', component: InsuranceDataComponent},
     { path: 'ImmunizationRecord', component: ImmunizationRecordComponent},
-    { path: 'MedicalPractice', component: MedicalPracticeComponent},	
+    { path: 'MedicalPractice', component: MedicalPracticeComponent},
     { path: 'MedicalPractitioner', component: MedicalPractitionerComponent},
+    { path: 'DataAccessor', component: DataAccessorComponent},
     { path: '',               redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 

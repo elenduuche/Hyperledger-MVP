@@ -2,6 +2,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import {
@@ -23,7 +24,7 @@ import { TypographyComponent } from './typography/typography.component';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-// import { UpgradeComponent } from './upgrade/upgrade.component';
+import { UpgradeComponent } from './upgrade/upgrade.component';
 import { LoginComponent } from './login/login.component';
 
 import { Configuration }     from './configuration';
@@ -38,6 +39,8 @@ import { InsuranceDataComponent } from './InsuranceData/InsuranceData.component'
 import { ImmunizationRecordComponent } from './ImmunizationRecord/ImmunizationRecord.component';
 import { MedicalPracticeComponent } from './MedicalPractice/MedicalPractice.component';
 import { MedicalPractitionerComponent } from './MedicalPractitioner/MedicalPractitioner.component';
+import { DataAccessorComponent } from './DataAccessor/DataAccessor.component';
+
 
 
 import {
@@ -49,6 +52,7 @@ import {
     BrowserAnimationsModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     ComponentsModule,
     RouterModule,
     MatButtonModule,
@@ -70,7 +74,7 @@ import {
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-    // UpgradeComponent,
+    UpgradeComponent,
     LoginComponent,
     ProfileInformationComponent,
 		PatientMasterDataComponent,
@@ -80,6 +84,7 @@ import {
     ImmunizationRecordComponent,
     MedicalPracticeComponent,
     MedicalPractitionerComponent,
+    DataAccessorComponent,
 
   ],
   providers: [

@@ -7,29 +7,28 @@ import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Configuration } from '../configuration';
 import { DataService } from '../data.service';
-import { ProfileInformationComponent } from './ProfileInformation.component';
-import {ProfileInformationService} from './ProfileInformation.service';
-import {PatientService} from './Patient.Service';
-describe('ProfileInformationComponent', () => {
-  let component: ProfileInformationComponent;
-  let fixture: ComponentFixture<ProfileInformationComponent>;
+import { DataAccessorComponent } from './DataAccessor.component';
+import {DataAccessorService} from './DataAccessor.service';
+describe('DataAccessorComponent', () => {
+  let component: DataAccessorComponent;
+  let fixture: ComponentFixture<DataAccessorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProfileInformationComponent ],
+      declarations: [ DataAccessorComponent ],
 imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule
   ],
-providers: [ProfileInformationService, PatientService, DataService, Configuration]
+providers: [DataAccessorService, DataService, Configuration]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProfileInformationComponent);
+    fixture = TestBed.createComponent(DataAccessorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

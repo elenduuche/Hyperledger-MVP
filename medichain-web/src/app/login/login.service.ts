@@ -8,7 +8,7 @@ import 'rxjs/Rx';
 
 // Can be injected into a constructor
 @Injectable()
-export class MedicalPractitionerService {
+export class LoginService {
 private NAMESPACE = 'org.medichain.mvp.MedicalPractitioner';
 private Medichain_BASEURL = 'http://localhost:3001/api/';
 private MedichainAuth_BASEURL = 'http://localhost:3000/api/';
@@ -18,32 +18,12 @@ private Auth_BASEURL = 'http://localhost:3002/api/';
     constructor(private http: Http, private httpClient: HttpClient, private dataService: DataService<MedicalPractitioner>) {
     };
 
-    public getAll(): Observable<MedicalPractitioner[]> {
-        return this.dataService.getAll(this.NAMESPACE);
-    }
-
-    public getAsset(id: any): Observable<MedicalPractitioner> {
-      return this.dataService.getSingle(this.NAMESPACE, id);
-    }
-
-    public addAsset(itemToAdd: any): Observable<MedicalPractitioner> {
-      return this.dataService.add(this.NAMESPACE, itemToAdd);
-    }
-    public updateAsset(id: any, itemToUpdate: any): Observable<MedicalPractitioner> {
-      return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
-    }
-
-    public deleteAsset(id: any): Observable<MedicalPractitioner> {
-      return this.dataService.delete(this.NAMESPACE, id);
-    }
-
-    public submitUserAccount(body) {
-      var url = this.Auth_BASEURL + 'register';
+    public ConfirmAccount(username) {
+      var url = this.Auth_BASEURL + 'confirm/' + username;
       return new Promise(resolve => {
           let headers: Headers = new Headers();
-          headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-          headers.append("Accept", "text/html; charset=UTF-8");
-          this.http.post(url, body, {
+          headers.append('Content-Type', 'application/json');
+          this.http.get(url, {
             headers: headers
           }).map(res => res.json()).subscribe(data => {
             console.log(data);
@@ -53,13 +33,6 @@ private Auth_BASEURL = 'http://localhost:3002/api/';
             console.log(error.json());
           });
       });
-    }
-
-    public issueIdentity(identity) {
-    var url = this.Medichain_BASEURL + 'system/identities/issue';
-    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-      return this.httpClient.post(url, identity,
-        {headers, responseType: 'blob'}).toPromise();
     }
 
     public importWallet(cardData, networkCard, token) {

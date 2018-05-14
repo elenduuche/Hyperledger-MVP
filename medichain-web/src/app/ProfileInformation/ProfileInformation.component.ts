@@ -1,19 +1,24 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ProfileInformationService } from './ProfileInformation.service';
+import { MedicalPractitionerService } from './../MedicalPractitioner/MedicalPractitioner.service';
+import { PatientService } from './Patient.service';
+
 import 'rxjs/add/operator/toPromise';
 @Component({
 	selector: 'app-ProfileInformation',
 	templateUrl: './ProfileInformation.component.html',
 	styleUrls: ['./ProfileInformation.component.css'],
-  providers: [ProfileInformationService]
+  providers: [ProfileInformationService, MedicalPractitionerService, PatientService]
 })
 export class ProfileInformationComponent implements OnInit {
 
   myForm: FormGroup;
 
   private allAssets;
+  private practitioners;
   private asset;
+  private patientAsset;
   private currentId;
 	private errorMessage;
 
@@ -96,7 +101,8 @@ export class ProfileInformationComponent implements OnInit {
   
 
 
-  constructor(private serviceProfileInformation:ProfileInformationService, fb: FormBuilder) {
+  constructor(private serviceProfileInformation:ProfileInformationService, fb: FormBuilder,
+     private serviceMedicalPractitioner: MedicalPractitionerService, private patientService: PatientService) {
     this.myForm = fb.group({
     
         
@@ -180,6 +186,12 @@ export class ProfileInformationComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll();
+    this.loadAllMedicalPractitioner();
+  }
+  onOptionSelected(event) {
+    console.log(event.memberId);
+    localStorage.setItem('practicionerId', event.memberId);
+    localStorage.setItem('practicionerPlaceOfWork', event.practicionerPlaceOfWork);
   }
 
   loadAll(): Promise<any> {
@@ -205,7 +217,29 @@ export class ProfileInformationComponent implements OnInit {
         }
     });
   }
-
+  loadAllMedicalPractitioner(): Promise<any> {
+    const tempList = [];
+    return this.serviceMedicalPractitioner.getAll()
+    .toPromise()
+    .then((result) => {
+      this.errorMessage = null;
+      result.forEach(asset => {
+        tempList.push(asset);
+      });
+      this.practitioners = tempList;
+    })
+    .catch((error) => {
+        if(error == 'Server error'){
+            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+        }
+        else if(error == '404 - Not Found'){
+        this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+        }
+        else{
+            this.errorMessage = error;
+        }
+    });
+  }
 	/**
    * Event handler for changing the checked state of a checkbox (handles array enumeration values)
    * @param {String} name - the name of the asset field to update
@@ -232,171 +266,110 @@ export class ProfileInformationComponent implements OnInit {
   }
 
   addAsset(form: any): Promise<any> {
+    let memberId = Math.floor((Math.random() * 100000) + 1);
+    let practitionerId = localStorage.getItem('practicionerId');
+    let practicionerPlaceOfWork = localStorage.getItem('practicionerPlaceOfWork');
     this.asset = {
       $class: "org.medichain.mvp.ProfileInformation",
-      
-        
-          "patientId":this.patientId.value,
-        
-      
-        
+
+          "patientId": memberId,
+
           "userName":this.userName.value,
-        
-      
-        
+
           "firstName":this.firstName.value,
-        
-      
-        
+
           "middleName":this.middleName.value,
-        
-      
-        
+
           "lastName":this.lastName.value,
-        
-      
-        
+
           "sex":this.sex.value,
-        
-      
-        
+
           "source":this.source.value,
-        
-      
-        
+
           "facility":this.facility.value,
-        
-      
-        
+
           "facilityId":this.facilityId.value,
-        
-      
-        
-          "currentPrescriptions":this.currentPrescriptions.value,
-        
-      
-        
+
           "dateOfBirth":this.dateOfBirth.value,
-        
-      
-        
+
           "phoneNumber":this.phoneNumber.value,
-        
-      
-        
+
           "streetAddress":this.streetAddress.value,
-        
-      
-        
+
           "city":this.city.value,
-        
-      
-        
+
           "state":this.state.value,
-        
-      
-        
+
           "country":this.country.value,
-        
-      
-        
+
           "zipCode":this.zipCode.value,
-        
-      
-        
-          "email":this.email.value,
-        
-      
-        
-          "numberOfConsultations":this.numberOfConsultations.value
-        
-      
+
+          "email":this.email.value
+
     };
 
+    this.patientAsset = {
+      $class: "org.medichain.mvp.Patient",
+          "memberId": memberId,
+          "userName": this.userName.value,
+          'patientDoctor': 'org.medichain.mvp.MedicalPractitioner#' + practitionerId,
+          'patientPractice': practicionerPlaceOfWork,
+    };
+
+    this.patientService.addAsset(this.patientAsset)
+    .toPromise()
+    .then(() => {
+    this.errorMessage = null;
+
+    })
+
     this.myForm.setValue({
-      
-        
+
           "patientId":null,
-        
-      
-        
+
           "userName":null,
-        
-      
-        
+
           "firstName":null,
-        
-      
-        
+
           "middleName":null,
-        
-      
-        
+
           "lastName":null,
-        
-      
-        
+
           "sex":null,
-        
-      
-        
+ 
           "source":null,
-        
-      
-        
+
           "facility":null,
-        
-      
-        
+
           "facilityId":null,
-        
-      
-        
+
           "currentPrescriptions":null,
-        
-      
-        
+
           "dateOfBirth":null,
-        
-      
-        
+
           "phoneNumber":null,
-        
-      
-        
+
           "streetAddress":null,
-        
-      
-        
+
           "city":null,
-        
-      
-        
+
           "state":null,
-        
-      
-        
+
           "country":null,
-        
-      
-        
+
           "zipCode":null,
-        
-      
-        
+
           "email":null,
-        
-      
-        
+
           "numberOfConsultations":null
-        
-      
     });
 
     return this.serviceProfileInformation.addAsset(this.asset)
     .toPromise()
     .then(() => {
-			this.errorMessage = null;
+      this.errorMessage = null;
+      
+
       this.myForm.setValue({
       
         
@@ -472,10 +445,9 @@ export class ProfileInformationComponent implements OnInit {
         
       
         
-          "numberOfConsultations":null 
-        
-      
+          "numberOfConsultations":null
       });
+
     })
     .catch((error) => {
         if(error == 'Server error'){
@@ -491,24 +463,10 @@ export class ProfileInformationComponent implements OnInit {
    updateAsset(form: any): Promise<any> {
     this.asset = {
       $class: "org.medichain.mvp.ProfileInformation",
-      
-        
-          
-        
-    
-        
-          
+
             "userName":this.userName.value,
           
-        
-    
-        
-          
             "firstName":this.firstName.value,
-          
-        
-    
-        
           
             "middleName":this.middleName.value,
           

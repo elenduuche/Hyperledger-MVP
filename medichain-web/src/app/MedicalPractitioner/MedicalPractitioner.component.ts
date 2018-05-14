@@ -138,7 +138,7 @@ export class MedicalPractitionerComponent implements OnInit {
           'registrationNumber' : this.registrationNumber.value,
           'speciality': this.speciality.value,
           'assistant': this.assistant.value,
-          'memberId': Math.floor((Math.random() * 100) + 1),
+          'memberId': Math.floor((Math.random() * 100000) + 1),
           'practicionerPlaceOfWork': 'org.medichain.mvp.MedicalPractice#' + practitionerPlaceOfWorkId,
     };
 
@@ -161,21 +161,14 @@ export class MedicalPractitionerComponent implements OnInit {
     return this.serviceMedicalPractitioner.addAsset(this.asset)
     .toPromise()
     .then(() => {
-			this.errorMessage = null;
+    this.errorMessage = null;
 
       this.loadAll();
-      // call endpoint to insert login credentials into mongoDb
-    var record = 'name=' + this.asset.firstName + '&username=' + this.asset.userName + '&password=' + 'password';
-    this.serviceMedicalPractitioner.submitUserAccount(record).then((data: any) => {
-      if (data != null) {
-      localStorage.setItem('userToken', data.token);
-
         //issue an Identity
-        var cred = 'participant=' + 'org.medichain.mvp.MedicalPractitioner#' + this.asset.memberId +
-                   '&userID=' + this.asset.memberId + '&options=' + '{}';
-        this.serviceMedicalPractitioner.issueIdentity(cred).then((resp: any) => {
+        const identity = 'participant=' + 'org.medichain.mvp.MedicalPractitioner#' + this.asset.memberId +
+                  '&userID=' + this.asset.memberId + '&options=' + '{}';
+        this.serviceMedicalPractitioner.issueIdentity(identity).then((resp: any) => {
           if (resp != null) {
-
             this.myForm.setValue({
               'firstName': null,
               'lastName': null,
@@ -186,25 +179,39 @@ export class MedicalPractitionerComponent implements OnInit {
               'memberId': null,
               'practicionerPlaceOfWork': null,
           });
-          } else {
-          }
-        });
+            // Create login account and Insert card into mongodb
+            var record = 'name=' + this.asset.firstName + '&username='
+            + this.asset.userName + '&password=' + 'password'
+            + '&identity=' + resp + '&hasWallet=' + false + '&authtoken=' + '';
+            this.serviceMedicalPractitioner.submitUserAccount(record).then((data: any) => {
+              if (data != null) {
+              localStorage.setItem('userToken', data.token);
 
-      } else {
-      }
+                } else {
+              }
+            });
+
+          // Import Wallet
+          //resp; returns blob
+          // let token = '';
+          // this.serviceMedicalPractitioner.importWallet(resp, 'org.medichain.mvp', token).then((walletRes: any) => {
+          //   if (walletRes != null) {
+          //    console.log(walletRes);
+          //    } else {
+          //   }
+          // });
+       }
     });
 
     })
     .catch((error) => {
         if (error === 'Server error') {
-            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+            this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
         } else {
 
             this.errorMessage = error;
         }
     });
-  
-    //localStorage.clear();
   }
 
 
@@ -213,28 +220,27 @@ export class MedicalPractitionerComponent implements OnInit {
     this.asset = {
       $class: 'org.medichain.mvp.MedicalPractitioner',
 
-            'firstName': this.lastName.value,
+            'firstName': this.firstName.value,
             'lastName': this.lastName.value,
             'userName': this.userName.value,
             'registrationNumber' : this.registrationNumber.value,
             'speciality': this.speciality.value,
             'assistant': this.assistant.value,
-            'memberId': Math.floor((Math.random() * 100) + 1),
             'practicionerPlaceOfWork': 'org.medichain.mvp.MedicalPractice#' + practitionerPlaceOfWorkId,
     };
 
-    return this.serviceMedicalPractitioner.updateAsset(form.get('firstName').value, this.asset)
+    return this.serviceMedicalPractitioner.updateAsset(this.memberId.value, this.asset)
 		.toPromise()
 		.then(() => {
       this.errorMessage = null;
       this.loadAll();
 		})
 		.catch((error) => {
-            if(error == 'Server error'){
-				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+            if(error === 'Server error'){
+				this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
 			}
-            else if(error == '404 - Not Found'){
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+            else if (error === '404 - Not Found'){
+				this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
 			}
 			else{
 				this.errorMessage = error;
@@ -264,19 +270,17 @@ export class MedicalPractitionerComponent implements OnInit {
     });
   }
 
-  setId(id: any): void{
+  setId(id: any): void {
     this.currentId = id;
   }
 
-  getForm(id: any): Promise<any>{
+  getForm(id: any): Promise<any> {
 
     return this.serviceMedicalPractitioner.getAsset(id)
     .toPromise()
     .then((result) => {
-			this.errorMessage = null;
+    this.errorMessage = null;
       let formObject = {
-        
-          
             'firstName': null,
             'lastName': null,
             'userName': null,
@@ -285,25 +289,18 @@ export class MedicalPractitionerComponent implements OnInit {
             'assistant': null,
             'memberId': null,
             'practicionerPlaceOfWork': null,
-          
-        
       };
-        if(result.firstName){
-          
+        if (result.firstName) {
             formObject.firstName = result.firstName;
-          
-        }else{
+        } else {
           formObject.firstName = null;
         }
-      
-        if(result.lastName){
-          
+        if (result.lastName) {
             formObject.lastName = result.lastName;
-          
-        }else{
+        } else {
           formObject.lastName = null;
         }
-      
+
         if (result.userName) {
             formObject.userName = result.userName;
         } else {
@@ -324,22 +321,20 @@ export class MedicalPractitionerComponent implements OnInit {
     } else {
     formObject.assistant = null;
     }
-    // if (result.memberId) {
-    //   formObject.memberId = result.memberId;
-    // } else {
-    // formObject.memberId = null;
-    // }
+    if (result.memberId !== '') {
+      formObject.memberId = result.memberId;
+    } else {
+    formObject.memberId = null;
+    }
       this.myForm.setValue(formObject);
-      
+
     })
     .catch((error) => {
-        if(error == 'Server error'){
+        if (error === 'Server error'){
             this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-        }
-        else if(error == '404 - Not Found'){
+        } else if(error === '404 - Not Found'){
 				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
-        }
-        else{
+        } else {
             this.errorMessage = error;
         }
     });
