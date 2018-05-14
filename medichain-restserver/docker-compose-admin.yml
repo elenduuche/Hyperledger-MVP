@@ -4,7 +4,7 @@ networks:
 services:
   medichain-rest-server-admin:
     image: medichain/medichain-composer-rest-server
-    container_name: medichain-rest-server
+    container_name: medichain-rest-server-admin
     ports:
       - 3001:3000
     environment:
