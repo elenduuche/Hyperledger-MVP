@@ -7,7 +7,7 @@ docker run \
     -e COMPOSER_PROVIDERS="${COMPOSER_PROVIDERS}" \
     -e COMPOSER_DATASOURCES="${COMPOSER_DATASOURCES}" \
     -v ~/.composer:/home/composer/.composer \
-    --name rest \
+    --name medichain-restserver \
     --network composer_default \
     -p 3000:3000 \
     medichain/medichain-composer-rest-server
