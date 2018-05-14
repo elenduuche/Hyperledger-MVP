@@ -12,25 +12,8 @@ services:
       - COMPOSER_NAMESPACES=always
       - COMPOSER_AUTHENTICATION=true
       - COMPOSER_MULTIUSER=true
-      - COMPOSER_PROVIDERS='{
-    "github": {
-        "provider": "github",
-        "module": "passport-github",
-        "clientID": "6e0ee178151078f9bf34",
-        "clientSecret": "b7f55a01c1ca5eeb6e4b546cd42b3844ad7e347b",
-        "authPath": "/auth/github",
-        "callbackURL": "/auth/github/callback",
-        "successRedirect": "/",
-        "failureRedirect": "/"
-    }
-}'
-      - COMPOSER_DATASOURCES='{
-    "db": {
-        "name": "db",
-        "connector": "mongodb",
-        "host": "mongo"
-    }
-}'
+      - COMPOSER_PROVIDERS="${COMPOSER_PROVIDERS}"
+      - COMPOSER_DATASOURCES="${COMPOSER_DATASOURCES}"
     volumes:
       - ~/.composer:/home/composer/.composer
     networks:
