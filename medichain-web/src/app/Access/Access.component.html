@@ -3,7 +3,7 @@
   
         <div class="row">
             <div class="col-md-12 text-right">
-              <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
+              <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Grant Access</button>
             </div>
           </div>
            <div class="row">
@@ -12,7 +12,7 @@
                   <div class="card">
                       <div class="card-header card-header-danger">
                           <h4 class="card-title ">System Access Information</h4>
-                          <p class="card-category"> All available Access record
+                          <p class="card-category"> All available Access authorization records
                           </p>
                           <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
                               <strong>Error:</strong> {{errorMessage}}
@@ -27,9 +27,9 @@
                                   <thead class="thead">
                                     <tr class="thead-cols">
                                       
-                                          <th class="info">accessorId</th>
+                                          <th class="info">Accessor Id</th>
                                       
-                                          <th class="info">patientId</th>
+                                          <th class="info">Patient Id</th>
                                       
                                         <th class="info">Actions</th>
                                     </tr>
@@ -71,14 +71,14 @@
           <div class="modal-body">
   
               <div class="form-group text-left">
-                  <label for="accessorId">select a data accessor</label>
+                  <label for="accessorId">Select a data accessor</label>
                   <select class='select-option' class="form-control" required  formControlName='accessorId' (change)='onAccessorOptionSelected(dataAccessors[$event.target.selectedIndex])'>
                       <option class='option' *ngFor='let option of dataAccessors' [ngValue]="option.practiceId" >{{option.userName}}</option>
                   </select>
                 </div>
   
                 <div class="form-group text-left">
-                    <label for="patientId">select a patient</label>
+                    <label for="patientId">Select a patient</label>
                     <select class='select-option' class="form-control" required  formControlName='patientId' (change)='onPatientOptionSelected(patients[$event.target.selectedIndex])'>
                         <option class='option' *ngFor='let option of patients' [ngValue]="option.patientId">{{option.firstName}} {{option.lastName}}</option>
                     </select>
@@ -102,13 +102,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="updateAssetModalLabel">Update Asset</h4>
+          <h4 class="modal-title" id="updateAssetModalLabel">Update</h4>
         </div>
         <form [formGroup]="myForm">
           <div class="modal-body">
   
               <div class="form-group text-left">
-                  <label for="accessorId">select a data accessor</label>
+                  <label for="accessorId">Select a data accessor</label>
                   <select class='select-option' class="form-control" required  formControlName='accessorId' (change)='onAccessorOptionSelected(dataAccessors[$event.target.selectedIndex])'>
                       <option class='option' *ngFor='let option of dataAccessors' [ngValue]="option.practiceId" >{{option.userName}}</option>
                   </select>
