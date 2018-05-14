@@ -188,6 +188,7 @@ import { Member } from './composer.base';
    }
    export abstract class PermissionControl extends Transaction {
       accessorId: string;
+      patientId: string;
    }
 //    export abstract class participant extends Member {
 //     companyName: String;

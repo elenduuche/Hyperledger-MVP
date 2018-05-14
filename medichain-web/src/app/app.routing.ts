@@ -10,7 +10,7 @@ import { TypographyComponent } from './typography/typography.component';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-// import { UpgradeComponent } from './upgrade/upgrade.component';
+import { UpgradeComponent } from './upgrade/upgrade.component';
 import { LoginComponent } from './login/login.component';
 
 import { ProfileInformationComponent } from './ProfileInformation/ProfileInformation.component';
@@ -22,24 +22,25 @@ import { ImmunizationRecordComponent } from './ImmunizationRecord/ImmunizationRe
 import { MedicalPracticeComponent } from './MedicalPractice/MedicalPractice.component';
 import { MedicalPractitionerComponent } from './MedicalPractitioner/MedicalPractitioner.component';
 import { DataAccessorComponent } from './DataAccessor/DataAccessor.component';
+import { GrantAccessComponent } from './Access/Access.component';
 
-
-const routes: Routes =[
+const routes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
+    { path: 'MedicalPractice', component: MedicalPracticeComponent},
+    { path: 'MedicalPractitioner', component: MedicalPractitionerComponent},
+    { path: 'DataAccessor', component: DataAccessorComponent},
+    { path: 'Access', component: GrantAccessComponent},
+    { path: 'ProfileInformation', component: ProfileInformationComponent},
+    { path: 'login',          component: LoginComponent },
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'notifications',  component: NotificationsComponent },
-    // { path: 'upgrade',        component: UpgradeComponent },
-    { path: 'login',          component: LoginComponent },
-    { path: 'ProfileInformation', component: ProfileInformationComponent},
+    { path: 'upgrade',        component: UpgradeComponent },
 		{ path: 'PatientMasterData', component: PatientMasterDataComponent},
 		{ path: 'Prescription', component: PrescriptionComponent},
 		{ path: 'ConsultationInformation', component: ConsultationInformationComponent},
 		{ path: 'InsuranceData', component: InsuranceDataComponent},
     { path: 'ImmunizationRecord', component: ImmunizationRecordComponent},
-    { path: 'MedicalPractice', component: MedicalPracticeComponent},
-    { path: 'MedicalPractitioner', component: MedicalPractitionerComponent},
-    { path: 'DataAccessor', component: DataAccessorComponent},
     { path: '',               redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 

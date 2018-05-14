@@ -24,11 +24,12 @@ import { TypographyComponent } from './typography/typography.component';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-// import { UpgradeComponent } from './upgrade/upgrade.component';
+import { UpgradeComponent } from './upgrade/upgrade.component';
 import { LoginComponent } from './login/login.component';
 
-import { Configuration }     from './configuration';
-import { DataService }     from './data.service';
+import { Configuration } from './configuration';
+import { DataService } from './data.service';
+import { DataAuthEnabledService } from './data.authenabled.service';
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
 import { ProfileInformationComponent } from './ProfileInformation/ProfileInformation.component';
@@ -40,6 +41,7 @@ import { ImmunizationRecordComponent } from './ImmunizationRecord/ImmunizationRe
 import { MedicalPracticeComponent } from './MedicalPractice/MedicalPractice.component';
 import { MedicalPractitionerComponent } from './MedicalPractitioner/MedicalPractitioner.component';
 import { DataAccessorComponent } from './DataAccessor/DataAccessor.component';
+import { GrantAccessComponent } from './Access/Access.component';
 
 
 
@@ -74,7 +76,7 @@ import {
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-    // UpgradeComponent,
+    UpgradeComponent,
     LoginComponent,
     ProfileInformationComponent,
 		PatientMasterDataComponent,
@@ -85,11 +87,13 @@ import {
     MedicalPracticeComponent,
     MedicalPractitionerComponent,
     DataAccessorComponent,
+    GrantAccessComponent,
 
   ],
   providers: [
     Configuration,
-    DataService
+    DataService,
+    DataAuthEnabledService
   ],
   bootstrap: [AppComponent]
   

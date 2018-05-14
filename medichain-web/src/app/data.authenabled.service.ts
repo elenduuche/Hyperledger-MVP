@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Configuration } from './configuration';
 
 @Injectable()
-export class DataService<Type> {
+export class DataAuthEnabledService<Type> {
     private resolveSuffix = '?resolve=true';
     private actionUrl: string;
     private headers: Headers;
 
-    constructor(private http: Http, private _configuration: Configuration) {
-        this.actionUrl = _configuration.PublicWithApiUrl;
+    constructor(private http: Http, private httpClient: HttpClient, private _configuration: Configuration) {
+        this.actionUrl = _configuration.PrivateServerWithApiUrl;
         this.headers = new Headers();
         this.headers.append('Content-Type', 'application/json');
         this.headers.append('Accept', 'application/json');
@@ -20,7 +21,7 @@ export class DataService<Type> {
 
     public getAll(ns: string): Observable<Type[]> {
         console.log('GetAll ' + ns + ' to ' + this.actionUrl + ns);
-        return this.http.get(`${this.actionUrl}${ns}`)
+        return this.httpClient.get(`${this.actionUrl}${ns}`, {withCredentials: true})
           .map(this.extractData)
           .catch(this.handleError);
     }
@@ -28,7 +29,7 @@ export class DataService<Type> {
     public getSingle(ns: string, id: string): Observable<Type> {
         console.log('GetSingle ' + ns);
 
-        return this.http.get(this.actionUrl + ns + '/' + id + this.resolveSuffix)
+        return this.httpClient.get(this.actionUrl + ns + '/' + id + this.resolveSuffix, {withCredentials: true})
           .map(this.extractData)
           .catch(this.handleError);
     }
@@ -38,7 +39,7 @@ export class DataService<Type> {
         console.log('Add ' + ns);
         console.log('asset', asset);
 
-        return this.http.post(this.actionUrl + ns, asset)
+        return this.httpClient.post(this.actionUrl + ns, asset, {withCredentials: true})
           .map(this.extractData)
           .catch(this.handleError);
     }
@@ -48,7 +49,7 @@ export class DataService<Type> {
         console.log('what is the id?', id);
         console.log('what is the updated item?', itemToUpdate);
         console.log('what is the updated item?', JSON.stringify(itemToUpdate));
-        return this.http.put(`${this.actionUrl}${ns}/${id}`, itemToUpdate)
+        return this.httpClient.put(`${this.actionUrl}${ns}/${id}`, itemToUpdate, {withCredentials: true})
           .map(this.extractData)
           .catch(this.handleError);
     }
@@ -56,7 +57,7 @@ export class DataService<Type> {
     public delete(ns: string, id: string): Observable<Type> {
         console.log('Delete ' + ns);
 
-        return this.http.delete(this.actionUrl + ns + '/' + id)
+        return this.httpClient.delete(this.actionUrl + ns + '/' + id, {withCredentials: true})
           .map(this.extractData)
           .catch(this.handleError);
     }
