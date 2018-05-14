@@ -1,0 +1,218 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 text-right">
+        <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-danger">
+            <h4 class="card-title ">Data Accessor Information</h4>
+            <p class="card-category"> All available data accessors
+            </p>
+            <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+              <strong>Error:</strong> {{errorMessage}}
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="thead">
+                  <tr class="thead-cols">
+
+                    <th class="info">Username</th>
+
+                <th class="info">Accessor ID</th>
+
+                <th class="info">Type of Data Accessor</th>
+
+                <th class="info">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let asset of allAssets">
+
+
+                    <td>{{asset.userName}}</td>
+
+                <td>{{asset.memberId}}</td>
+
+                <td>{{asset.typeOfDataAccessor}}</td>
+
+                    <td>
+                      <button (click)="getForm(asset.memberId);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update</button>
+                  <button (click)="setId(asset.memberId);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAssetModal">Delete</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="addAssetModalLabel">Add New Data Acessor</h4>
+          </div>
+          <form [formGroup]="myForm">
+            <div class="modal-body">
+
+              <div class="form-group text-left">
+                <label for="userName">Username</label>
+
+                <input formControlName="userName" type="text" class="form-control">
+              </div>
+
+              <label for="typeOfDataAccessor">Type of Data Accessor</label>
+              <div class="checkbox">
+
+                <label>
+                  <input formControlName="typeOfDataAccessor" name="typeOfDataAccessor" value="ACADEMIC_RESEARCHER" type="radio" /> ACADEMIC RESEARCHER
+                </label>
+
+                <label>
+                  <input formControlName="typeOfDataAccessor" name="typeOfDataAccessor" value="COMMERCIAL_ENTITY" type="radio" /> COMMERCIAL ENTITY
+                </label>
+
+              </div>
+
+
+            </div>
+            <div class="modal-footer">
+              <button (click)="addAsset(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="updateAssetModal" tabindex="-1" role="dialog" aria-labelledby="updateAssetModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="updateAssetModalLabel">Update</h4>
+          </div>
+          <form [formGroup]="myForm">
+            <div class="modal-body">
+
+
+
+              <div class="form-group text-left">
+                <label for="userName">Username</label>
+
+                <input formControlName="userName" type="text" class="form-control" required>
+              </div>
+
+              <label for="typeOfDataAccessor">Type of Data Accessor</label>
+              <div class="checkbox" aria-required="true">
+
+                <label>
+                  <input formControlName="typeOfDataAccessor" name="typeOfDataAccessor" value="ACADEMIC_RESEARCHER" type="radio" /> ACADEMIC RESEARCHER
+                </label>
+
+                <label>
+                  <input formControlName="typeOfDataAccessor" name="typeOfDataAccessor" value="COMMERCIAL_ENTITY" type="radio" /> COMMERCIAL ENTITY
+                </label>
+
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button (click)="updateAsset(myForm)" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="modal fade" id="deleteAssetModal" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="deleteAssetModalLabel">Delete</h4>
+          </div>
+          <form [formGroup]="myForm" (ngSubmit)="deleteAsset()">
+            <div class="modal-body">
+              Are you sure you want to delete this asset?
+            </div>
+            <div class="modal-footer">
+              <button (click)="deleteAsset()" type="submit" class="btn btn-danger" data-dismiss="modal">Yes</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+   <!--  <div class="container">
+      <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        <strong>Error:</strong> {{errorMessage}}
+      </div>
+      <div *ngIf="successMessage" class="alert alert-success" role="alert">
+        <strong>Well done:</strong> {{successMessage}}
+      </div>
+      <h1 id='assetName'>Data Accessor Information</h1>
+      <div class="row">
+        <div class="col-md-12 text-right">
+          <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add New</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-bordered table-responsive table-striped">
+            <thead class="thead">
+              <tr class="thead-cols">
+
+                <th class="info">Username</th>
+
+                <th class="info">Accessor ID</th>
+
+                <th class="info">Type of Data Accessor</th>
+
+                <th class="info">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let asset of allAssets">
+
+                <td>{{asset.userName}}</td>
+
+                <td>{{asset.memberId}}</td>
+
+                <td>{{asset.typeOfDataAccessor}}</td>
+                <td>
+                  <button (click)="getForm(asset.memberId);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update</button>
+                  <button (click)="setId(asset.memberId);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAssetModal">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+</div>

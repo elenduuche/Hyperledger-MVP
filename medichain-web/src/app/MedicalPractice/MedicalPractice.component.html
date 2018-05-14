@@ -1,0 +1,165 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 text-right">
+        <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-danger">
+            <h4 class="card-title ">Medical Practice</h4>
+            <p class="card-category"> All available medical practice record
+            </p>
+            <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+              <strong>Error:</strong> {{errorMessage}}
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="thead">
+                  <tr class="thead-cols">
+
+                    <th class="info">Practice ID</th>
+
+                    <th class="info">Practice Name</th>
+
+                    <th class="info">Practice Registration No.</th>
+
+                    <th class="info">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let asset of allAssets">
+
+
+                    <td>{{asset.practiceId}}</td>
+
+                    <td>{{asset.practiceName}}</td>
+
+                    <td>{{asset.practiceRegistrationNumber}}</td>
+
+                    <td>
+                      <button (click)="getForm(asset.practiceId);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update</button>
+
+                      <button (click)="setId(asset.practiceId);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAssetModal">Delete</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="addAssetModalLabel">Add</h4>
+          </div>
+          <form [formGroup]="myForm">
+            <div class="modal-body">
+
+              <div class="form-group text-left">
+                <label for="practiceName">Practice Name</label>
+
+                <input formControlName="practiceName" type="text" class="form-control">
+
+              </div>
+
+              <div class="form-group text-left">
+                <label for="practiceRegistrationNumber">Practice Registration No.</label>
+
+                <input formControlName="practiceRegistrationNumber" type="number" class="form-control">
+
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button (click)="addAsset(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="modal fade" id="updateAssetModal" tabindex="-1" role="dialog" aria-labelledby="updateAssetModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="updateAssetModalLabel">Update</h4>
+          </div>
+          <form [formGroup]="myForm">
+            <div class="modal-body">
+
+
+              <div class="form-group text-left">
+                <label for="practiceName">Practice Name</label>
+
+                <input [ngModel]="practiceName" formControlName="practiceName" type="text" class="form-control">
+
+              </div>
+
+              <div class="form-group text-left">
+                <label for="practiceRegistrationNumber">Practice Registration No.</label>
+
+                <input [ngModel]="practiceRegistrationNumber" formControlName="practiceRegistrationNumber" type="text" class="form-control">
+
+              </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+              <button (click)="updateAsset(myForm)" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="modal fade" id="deleteAssetModal" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="deleteAssetModalLabel">Delete</h4>
+          </div>
+          <form [formGroup]="myForm" (ngSubmit)="deleteAsset()">
+            <div class="modal-body">
+              Are you sure you want to delete this participant?
+            </div>
+            <div class="modal-footer">
+              <button (click)="deleteAsset()" type="submit" class="btn btn-danger" data-dismiss="modal">Yes</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

@@ -1,21 +1,35 @@
 {
-  "name": "medichain",
-  "version": "0.0.1",
-  "description": "HyperLedger Fabric Based MVP",
-  "scripts": {
-    "test": "mocha --recursive"
+  "engines": {
+    "composer": "^0.19.5"
   },
-  "author": "Samuel Dare",
-  "email": "samuel.b.dare@gmail.com",
-  "license": "Apache-2.0",
+  "name": "medichain",
+  "version": "0.0.2",
+  "description": "Medichain business network",
+  "scripts": {
+    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/$npm_package_name@$npm_package_version.bna",
+    "pretest": "npm run lint",
+    "lint": "eslint . --fix",
+    "test": "nyc mocha -t 0 test/*.js"
+  },
+  "keywords": [
+    "composer",
+    "composer-network"
+  ],
+  "author": "Elendu Uche",
+  "email": "eld.solution@gmail.com",
+  "license": "UNLICENSED",
   "devDependencies": {
-    "composer-admin": "latest",
-    "composer-client": "latest",
-    "composer-common": "latest",
-    "composer-connector-embedded": "latest",
+    "composer-admin": "^0.19.5",
+    "composer-cli": "^0.19.5",
+    "composer-client": "^0.19.5",
+    "composer-common": "^0.19.5",
+    "composer-connector-embedded": "^0.19.5",
+    "composer-cucumber-steps": "^0.19.5",
     "chai": "latest",
+    "chai-as-promised": "latest",
+    "cucumber": "^2.2.0",
     "eslint": "latest",
-    "istanbul": "latest",
+    "nyc": "latest",
     "mkdirp": "latest",
     "mocha": "latest"
   }

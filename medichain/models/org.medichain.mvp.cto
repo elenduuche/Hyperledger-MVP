@@ -1,12 +1,49 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
-* For the first iteration of the POC, all the model definitions
-* will be placed in one file. As the project evolves, we might 
-*proceed to modularize each component (i.e seperate concerns)  
-**/
+ * Write your model definitions here
+ */
 
 namespace org.medichain.mvp
+
 import composer.base.*
-import composer.events.*
+
+participant SampleParticipant identified by participantId {
+  o String participantId
+  o String firstName
+  o String lastName
+}
+
+asset SampleAsset identified by assetId {
+  o String assetId
+  --> SampleParticipant owner
+  o String value
+}
+
+transaction SampleTransaction {
+  --> SampleAsset asset
+  o String newValue
+}
+
+event SampleEvent {
+  --> SampleAsset asset
+  o String oldValue
+  o String newValue
+}
+
+/****** MEDICHAIN MODELS START HERE ************/
 
 /** 
 **Enum for the type of consultation
@@ -69,9 +106,9 @@ enum Disease {
 **Enum for the type of Gender
 **/
 enum Gender {
-  o Male 
-  o Female
-  o Undisclosed
+  o MALE 
+  o FEMALE
+  o UNDISCLOSED
 }
 
 /** 
@@ -82,8 +119,12 @@ enum DataAccessorType {
   o COMMERCIAL_ENTITY
 }
 
-participant Patient identified by patientId extends Member {
-  o String patientId
+enum PermissionAction {
+  o GRANTED
+  o REVOKED
+}
+
+participant Patient extends Member {
   --> MedicalPractitioner patientDoctor
   --> MedicalPractice patientPractice
 }
@@ -94,162 +135,145 @@ participant MedicalPractice identified by practiceId {
   o Integer practiceRegistrationNumber
 }
 
-participant MedicalPractitioner identified by practitionerId extends Member {
-  o String practitionerId
-  o String userName
+participant MedicalPractitioner extends Member {
   o String firstName
   o String lastName
-  o Integer registrationNumber 
-  o String speciality 
+  o Integer registrationNumber optional
+  o String speciality optional
   o String assistant optional 
   --> MedicalPractice practicionerPlaceOfWork 
   o String[] authorized optional
 }
 
-participant DataAccessor identified by accessorId extends Member {
-  o String accessorId
+participant DataAccessor extends Member {
   o DataAccessorType typeOfDataAccessor
-  o String accessorName 
   o String[] authorized optional
 }
 
-asset ProfileInformation identified by patientId {
+abstract asset PatientAsset {
   o String patientId
-  o String userName
+}
+
+asset ProfileInformation identified by patientId extends PatientAsset {
   o String firstName
   o String middleName optional
-  o String lastName 
+  o String lastName
   o Gender sex 
-  o String source
-  o String facility
-  o String facilityId
-  --> Prescription[] currentPrescriptions
-  o DateTime dateOfBirth
+  o String source optional
+  o String facility optional
+  o String facilityId optional
+  --> Prescription[] currentPrescriptions optional
+  //--> ConsultationInformation lastConsultation
+  o DateTime dateOfBirth optional
   o Integer phoneNumber optional
-  o String streetAddress
-  o String city
+  o String streetAddress optional
+  o String city 
   o String state 
   o String country
-  o String zipCode
+  o String zipCode optional
   o String email
   o Integer[] numberOfConsultations optional
 }
 
-
-asset PatientMasterData identified by patientId {
-  o String patientId
-  o String masterDataId
+asset PatientMasterData identified by patientId extends PatientAsset {
   --> Prescription[] patientPrescriptions optional
   --> ImmunizationRecord[] patientImmunizationHistory optional
   --> ConsultationInformation[] patientConsultationHistory optional
   --> InsuranceData[] patientInsuranceInfo optional
-} 
-
-asset Prescription identified by patientId {
-  o String patientId
-  o String prescriptionId
-  o Integer pharmacyId
-  o DateTime dateAdded
-  o DateTime dateModified
-  o Integer providerId
-  o DateTime startDate
-  o String drug
-  o String dosage 
-  o String quantity
-  o Double size 
-  o Integer unit 
-  o String perRefil // amount of quantity to be issued per refil visit ?
-  o DateTime filledDate // Date the prescription was filledDate
-  o String medication  
-  o String note
-  o Boolean active 
- 
 }
 
-asset ConsultationInformation identified by patientId {
-  o String patientId
+asset Prescription identified by prescriptionId extends PatientAsset {
+  o String prescriptionId
+  --> ConsultationInformation consultationId
+  o Integer pharmacyId optional
+  o DateTime dateAdded optional
+  o DateTime dateModified optional
+  o Integer providerId optional
+  o DateTime startDate optional
+  o String drug optional
+  o String dosage optional
+  o String quantity optional
+  o Double size optional
+  o Integer unit optional
+  o String perRefil optional// amount of quantity to be issued per refil visit ?
+  o DateTime filledDate optional// Date the prescription was filledDate
+  o String medication optional
+  o String note optional
+  o Boolean active default=true
+}
+
+asset ConsultationInformation identified by consultationId extends PatientAsset {
   o String consultationId
   o TypeOfConsultation consultationType
   o DateTime dateOfConsultation 
   o Disease consultationDisease optional
   --> Prescription[] consultationPrescription optional
   --> ImmunizationRecord[] consultationImmunization optional
-  
-  
- /*
-  --> AQl6Test AQl6TestResults optional*/
-
-}
-/*
-asset AQl6Test identified by testId {
-  o String testId
-
-} */
-
-asset InsuranceData identified by patientId {
-o String patientId
-o String typeOfInsurance /* Change to Enum */
-o String provider 
-o String plan_name 
-o String policy_number
-o Integer group_number 
-o String subscriber_lname 
-o String subscriber_mname 
-o String subscriber_fname 
-o String subscriber_relationship 
-o String subscriber_ss 
-o DateTime subscriber_DOB
-o String subscriber_street 
-o String subscriber_postal_code 
-o String subscriber_city 
-o String subscriber_state 
-o String subscriber_country 
-o String subscriber_phone 
-o String subscriber_employer 
-o String subscriber_employer_street 
-o String subscriber_employer_postal_code 
-o String subscriber_employer_state 
-o String subscriber_employer_country 
-o String subscriber_employer_city 
-o String copay 
-o DateTime date 
-o String subscriber_sex 
-o String accept_assignment 
 }
 
+asset InsuranceData identified by patientId extends PatientAsset {
+  o String policy_number
+  o String typeOfInsurance /* Change to Enum */
+  o String provider 
+  o String plan_name
+  o Integer group_number 
+  o String subscriber_lname 
+  o String subscriber_mname 
+  o String subscriber_fname 
+  o String subscriber_relationship 
+  o String subscriber_ss 
+  o DateTime subscriber_DOB
+  o String subscriber_street 
+  o String subscriber_postal_code 
+  o String subscriber_city 
+  o String subscriber_state 
+  o String subscriber_country 
+  o String subscriber_phone 
+  o String subscriber_employer 
+  o String subscriber_employer_street 
+  o String subscriber_employer_postal_code 
+  o String subscriber_employer_state 
+  o String subscriber_employer_country 
+  o String subscriber_employer_city 
+  o String copay 
+  o DateTime date 
+  o String subscriber_sex 
+  o String accept_assignment 
+}
 
-asset ImmunizationRecord identified by immunizationId {
-  o String patientId
+asset ImmunizationRecord identified by immunizationId extends PatientAsset {
   o String immunizationId
   o ImmunizationType subTypeOfImmunization
-  o DateTime dateOfImmunization 
+  o DateTime dateOfImmunization
 }
 
-transaction updateConsultationCount {
-    o Integer addNewConsultation 
-    --> ProfileInformation numberOfConsultations
-  }
-
-
-transaction updateConsultationInfo {
-    o ConsultationInformation updatedDatedInfo
-  }
-
-
-transaction updatePatientMedicalHistory {
-    --> PatientMasterData patientMasterData
-  }
-
 abstract transaction PermissionControl {
-    o String accessorId
-  }
+  --> DataAccessor accessorId
+  --> Patient patientId
+}
 
 transaction GrantAccess extends PermissionControl {
-  }
+}
 
- transaction RevokeAccess extends PermissionControl {
-  }
+transaction RevokeAccess extends PermissionControl {
+}
 
-  event MemberEvent {
-      o PermissionControl permissionControl
-  }
+event MemberAccessPermissionEvent {
+  --> MedicalPractitioner practitionerId
+  --> DataAccessor accessorId
+  --> Patient patientId
+  o PermissionAction action
+}
+
+/* transaction updateConsultationCount {
+  o Integer addNewConsultation 
+  --> ProfileInformation numberOfConsultations
+}
+
+transaction updateConsultationInfo {
+  o ConsultationInformation updatedDatedInfo
+}
+
+transaction updatePatientMedicalHistory {
+  --> PatientMasterData patientMasterData
+} */

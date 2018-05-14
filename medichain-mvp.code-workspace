@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "medichain-web"
+		},
+		{
+			"path": "medichain"
+		},
+		{
+			"path": "medichain-restserver"
+		}
+	],
+	"settings": {}
+}
