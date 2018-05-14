@@ -1,33 +1,105 @@
+<div class="main-content">
+  <div class="container-fluid">
+
+
+      <div class="row">
+          <div class="col-md-12 text-right">
+            <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
+          </div>
+        </div>
+         <div class="row">
+           
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title ">Medical Practitoner</h4>
+                        <p class="card-category"> All available medical practitoner record
+                        </p>
+                        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+                            <strong>Error:</strong> {{errorMessage}}
+                          </div> 
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="thead">
+                                  <tr class="thead-cols">
+                                    
+                                        <th class="info">FirstName</th>          
+                                        <th class="info">LastName</th>           
+                                        <th class="info">UserName</th>
+                                        <th class="info">Registration Number</th>
+                                        <th class="info">Speciality</th>
+                                        <th class="info">Assistant</th>
+                                      <th class="info">Actions</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let asset of allAssets">
+                                        <td>{{asset.firstName}}</td>
+                                        <td>{{asset.lastName}}</td>
+                                        <td>{{asset.userName}}</td>
+                                        <td>{{asset.registrationNumber}}</td>
+                                        <td>{{asset.speciality}}</td>
+                                        <td>{{asset.assistant}}</td>
+                                    <td>
+                                      <button (click)="getForm(asset.memberId);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update Asset</button>
+                        
+                                      <button (click)="setId(asset.memberId);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAssetModal">Delete Asset</button>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+  
+        </div>
+
 <div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="addAssetModalLabel">New Medical Practitioner</h4>
+        <h4 class="modal-title" id="addAssetModalLabel">Add Asset</h4>
       </div>
       <form [formGroup]="myForm">
         <div class="modal-body">
-            <div class="form-group text-left">
-              <label for="userName">Username</label>
-              <input formControlName="userName" type="text" class="form-control">
-            </div>
-            <div class="form-group text-left">
+
+              <div class="form-group text-left">
                 <label for="firstName">First Name</label>
-                <input formControlName="firstName" type="text" class="form-control">
-            </div>
-            <div class="form-group text-left">
-              <label for="lastName">Last Name</label>
-              <input formControlName="lastName" type="text" class="form-control">
-            </div>
-            <div class="form-group text-left">
-              <label for="registrationNumber">Registration No.</label>
-              <input formControlName="registrationNumber" type="number" class="form-control">
-            </div>
-            <div class="form-group text-left">
-              <label for="practicionerPlaceOfWork">Place of Work ID</label>
-              <input formControlName="practicionerPlaceOfWork" type="text" class="form-control">
-            </div>
-        </div>
+                  <input formControlName="firstName" type="text" class="form-control">  
+              </div>
+              <div class="form-group text-left">
+                <label for="lastName">Last Name</label>
+                  <input formControlName="lastName" type="text" class="form-control">
+              </div>
+              <div class="form-group text-left">
+                <label for="userName">UserName</label>
+                  <input formControlName="userName" type="text" class="form-control">
+              </div>
+              <div class="form-group text-left">
+                <label for="registrationNumber">Registration Number</label>
+                  <input formControlName="registrationNumber" type="number" class="form-control">
+              </div>
+              <div class="form-group text-left">
+                <label for="speciality">Speciality</label>
+                  <input formControlName="speciality" type="text" class="form-control">
+              </div>
+              <div class="form-group text-left">
+                  <label for="practitionerPlaceOfWork">select a practice</label>
+                  <select class='select-option' class="form-control" required  formControlName='practitionerPlaceOfWork' (change)='onOptionSelected(practices[$event.target.selectedIndex])'>
+                      <option class='option' *ngFor='let option of practices' [ngValue]="option.practiceId" >{{option.practiceName}}</option>
+                  </select>
+                </div>
+               
+              <div class="form-group text-left">
+                <label for="assistant">Assistant</label>
+                  <input formControlName="assistant" type="text" class="form-control">
+              </div>
+         </div>
         <div class="modal-footer">
           <button (click)="addAsset(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -50,22 +122,37 @@
       <form [formGroup]="myForm">
         <div class="modal-body">
 
-          
+          <div class="form-group text-left">
+            <label for="firstName">firstName</label>
+              <input [ngModel]="firstName"formControlName="firstName" type="text" class="form-control">
+          </div>
             <div class="form-group text-left">
               <label for="lastName">lastName</label>
-
                 <input [ngModel]="lastName"formControlName="lastName" type="text" class="form-control">
-
             </div>
           
             <div class="form-group text-left">
               <label for="userName">userName</label>
-
                 <input [ngModel]="userName"formControlName="userName" type="text" class="form-control">
-
             </div>
-          
-
+            <div class="form-group text-left">
+              <label for="registrationNumber">registrationNumber</label>
+                <input [ngModel]="registrationNumber"formControlName="registrationNumber" type="text" class="form-control">
+            </div>
+            <div class="form-group text-left">
+              <label for="speciality">speciality</label>
+                <input [ngModel]="speciality"formControlName="speciality" type="text" class="form-control">
+            </div>
+            <div class="form-group text-left">
+              <label for="assistant">assistant</label>
+                <input [ngModel]="assistant"formControlName="assistant" type="text" class="form-control">
+            </div>
+            <div class="form-group text-left">
+                <label for="practitionerPlaceOfWork">select a practice</label>
+                <select class='select-option' class="form-control" required  formControlName='practitionerPlaceOfWork' (change)='onOptionSelected(practices[$event.target.selectedIndex])'>
+                    <option class='option' *ngFor='let option of practices' [ngValue]="option.practiceId" >{{option.practiceName}}</option>
+                </select>
+              </div>
 
         </div>
         <div class="modal-footer">
@@ -99,50 +186,5 @@
   </div>
 </div>
 
-<div class="container">
-	<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-		<strong>Error:</strong> {{errorMessage}}
-	</div>
-  <h1 id='assetName'>Medical Practitoner</h1>
-  <div class="row">
-    <div class="col-md-12 text-right">
-      <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add</button>
-    </div>
-  </div>
-  <br>
-  <div class="row">
-    <div class="col-md-12">
-      <table class="table table-bordered table-responsive table-striped">
-        <thead class="thead">
-          <tr class="thead-cols">
-            
-                <th class="info">First Name</th>
-            
-                <th class="info">Last Name</th>
-            
-                <th class="info">Username</th>
-            
-              <th class="info">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let asset of allAssets">
-
-            
-                <td>{{asset.firstName}}</td>
-            
-                <td>{{asset.lastName}}</td>
-            
-                <td>{{asset.userName}}</td>
-            
-            <td>
-              <button (click)="getForm(asset.practiceId);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update Asset</button>
-
-              <button (click)="setId(asset.practiceId);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAssetModal">Delete Asset</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 </div>

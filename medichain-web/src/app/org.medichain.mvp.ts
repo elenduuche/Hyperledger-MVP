@@ -48,16 +48,15 @@ import { Member } from './composer.base';
       AIDS,
    }
    export enum Gender {
-      Male,
-      Female,
-      Undisclosed,
+      MALE,
+      FEMALE,
+      UNDISCLOSED,
    }
    export enum DataAccessorType {
       ACADEMIC_RESEARCHER,
       COMMERCIAL_ENTITY,
    }
 
-  
    export class Patient extends Member {
       patientId: string;
       patientDoctor: MedicalPractitioner;
@@ -69,7 +68,7 @@ import { Member } from './composer.base';
       practiceRegistrationNumber: number;
    }
    export class MedicalPractitioner extends Member {
-      memberId: string;
+      practitionerId: string;
       userName: string;
       firstName: string;
       lastName: string;
@@ -78,11 +77,12 @@ import { Member } from './composer.base';
       assistant: string;
       practicionerPlaceOfWork: MedicalPractice;
       authorized: string[];
+      memberId: string;
    }
    export class DataAccessor extends Member {
-      accessorId: string;
-      typeOfDataAccessor: DataAccessor;
-      name: string;
+      userName: string;
+      memberId: string;
+      typeOfDataAccessor: DataAccessorType;
       authorized: string[];
    }
    export class ProfileInformation extends Asset {
@@ -107,11 +107,11 @@ import { Member } from './composer.base';
       numberOfConsultations: number[];
    }
    export class PatientMasterData extends Asset {
-      patientId: string;
+      masterDataId: string;
       patientPrescriptions: Prescription[];
       patientImmunizationHistory: ImmunizationRecord[];
-      patientConsultationHistory: ConsultationInformation[];
-      patientInsuranceInfo: InsuranceData[];
+      patientConsultationHistory: ConsultationInformation;
+      patientInsuranceInfo: InsuranceData;
    }
    export class Prescription extends Asset {
       prescriptionId: string;

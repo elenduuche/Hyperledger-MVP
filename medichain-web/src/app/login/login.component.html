@@ -8,24 +8,13 @@
                       <p class="card-category">Sign in to get started</p>
                   </div>
                   <div class="card-body">
-                      <form>
+                        <form [formGroup]="myForm">
                           <div class="row">
                               <div class="col-md-6">
-                                <mat-form-field class="example-full-width">
-                              <input matInput placeholder="Email address" type="email">
-                                </mat-form-field>
-                              </div>
-                             
-                          </div>
-                          <div class="row">
-                            <div class="col-md-6">
-                                <mat-form-field class="example-full-width">
-                                  <input matInput placeholder="Password" type="password">
-                                </mat-form-field>
+                             <input formControlName="username" type="text" class="form-control" placeholder="Username">
                               </div>
                           </div>
-                   
-                          <button mat-raised-button type="submit" class="btn btn-danger pull-right">Update Profile</button>
+                          <button (click)="submitCred(myForm);" mat-raised-button type="submit" class="btn btn-danger pull-right">Sign In</button>
                           <div class="clearfix"></div>
                       </form>
                   </div>

@@ -19,7 +19,7 @@ export class PatientMasterDataComponent implements OnInit {
 
   
       
-          patientId = new FormControl("", Validators.required);
+          masterDataId = new FormControl("", Validators.required);
         
   
       
@@ -44,7 +44,7 @@ export class PatientMasterDataComponent implements OnInit {
     this.myForm = fb.group({
     
         
-          patientId:this.patientId,
+          masterDataId:this.masterDataId,
         
     
         
@@ -124,7 +124,7 @@ export class PatientMasterDataComponent implements OnInit {
       $class: "org.medichain.mvp.PatientMasterData",
       
         
-          "patientId":this.patientId.value,
+          "masterDataId":this.masterDataId.value,
         
       
         
@@ -148,7 +148,7 @@ export class PatientMasterDataComponent implements OnInit {
     this.myForm.setValue({
       
         
-          "patientId":null,
+          "masterDataId":null,
         
       
         
@@ -176,7 +176,7 @@ export class PatientMasterDataComponent implements OnInit {
       this.myForm.setValue({
       
         
-          "patientId":null,
+          "masterDataId":null,
         
       
         
@@ -242,7 +242,7 @@ export class PatientMasterDataComponent implements OnInit {
     
     };
 
-    return this.servicePatientMasterData.updateAsset(form.get("patientId").value,this.asset)
+    return this.servicePatientMasterData.updateAsset(form.get("masterDataId").value,this.asset)
 		.toPromise()
 		.then(() => {
 			this.errorMessage = null;
@@ -294,7 +294,7 @@ export class PatientMasterDataComponent implements OnInit {
       let formObject = {
         
           
-            "patientId":null,
+            "masterDataId":null,
           
         
           
@@ -318,12 +318,12 @@ export class PatientMasterDataComponent implements OnInit {
 
 
       
-        if(result.patientId){
+        if(result.masterDataId){
           
-            formObject.patientId = result.patientId;
+            formObject.masterDataId = result.masterDataId;
           
         }else{
-          formObject.patientId = null;
+          formObject.masterDataId = null;
         }
       
         if(result.patientPrescriptions){
@@ -380,7 +380,7 @@ export class PatientMasterDataComponent implements OnInit {
     this.myForm.setValue({
       
         
-          "patientId":null,
+          "masterDataId":null,
         
       
         

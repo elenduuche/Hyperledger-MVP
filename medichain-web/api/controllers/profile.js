@@ -16,3 +16,18 @@ module.exports.profileRead = function(req, res) {
   }
 
 };
+module.exports.getProfile = function(req, res) {
+console.log('getProfile endpoint called by: ' + req.params.id)
+  if (!req.params.id) {
+    res.status(401).json({
+      "message" : "UnauthorizedError: no username specified"
+    });
+  } else {
+    User
+      .findOne({username: req.params.id})
+      .exec(function(err, user) {
+        res.status(200).json(user);
+      });
+  }
+
+};

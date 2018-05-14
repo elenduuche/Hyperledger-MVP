@@ -10,6 +10,7 @@ var ctrlProfile = require('../controllers/profile');
 var ctrlAuth = require('../controllers/authentication');
 
 // profile
+router.get('/confirm/:id', ctrlProfile.getProfile);
 router.get('/profile', auth, ctrlProfile.profileRead);
 
 // authentication
