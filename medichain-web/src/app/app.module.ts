@@ -24,7 +24,7 @@ import { TypographyComponent } from './typography/typography.component';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-import { UpgradeComponent } from './upgrade/upgrade.component';
+// import { UpgradeComponent } from './upgrade/upgrade.component';
 import { LoginComponent } from './login/login.component';
 
 import { Configuration }     from './configuration';
@@ -74,7 +74,7 @@ import {
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-    UpgradeComponent,
+    // UpgradeComponent,
     LoginComponent,
     ProfileInformationComponent,
 		PatientMasterDataComponent,

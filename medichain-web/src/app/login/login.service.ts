@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Http, Headers } from '@angular/http';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { MedicalPractitioner } from '../org.medichain.mvp';
+import { ConfigService } from '../config/config.service'
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
@@ -16,6 +17,10 @@ private Auth_BASEURL = 'http://localhost:3002/api/';
 
 
     constructor(private http: Http, private httpClient: HttpClient, private dataService: DataService<MedicalPractitioner>) {
+      let config = new ConfigService();
+      this.Medichain_BASEURL = config.getAdminEndpoint();
+      this.MedichainAuth_BASEURL = config.getAuthEndpoint();
+      this.Auth_BASEURL = config.getAuthEndpoint();
     };
 
     public ConfirmAccount(username) {

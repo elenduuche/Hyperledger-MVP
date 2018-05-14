@@ -4,7 +4,7 @@
 
       <div class="row">
           <div class="col-md-12 text-right">
-            <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
+            <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add</button>
           </div>
         </div>
          <div class="row">
@@ -25,9 +25,9 @@
                                 <thead class="thead">
                                   <tr class="thead-cols">
                                     
-                                        <th class="info">FirstName</th>          
-                                        <th class="info">LastName</th>           
-                                        <th class="info">UserName</th>
+                                        <th class="info">First Name</th>          
+                                        <th class="info">Last Name</th>           
+                                        <th class="info">User Name</th>
                                         <th class="info">Registration Number</th>
                                         <th class="info">Speciality</th>
                                         <th class="info">Assistant</th>
@@ -63,7 +63,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="addAssetModalLabel">Add Asset</h4>
+        <h4 class="modal-title" id="addAssetModalLabel">Add</h4>
       </div>
       <form [formGroup]="myForm">
         <div class="modal-body">
@@ -77,7 +77,7 @@
                   <input formControlName="lastName" type="text" class="form-control">
               </div>
               <div class="form-group text-left">
-                <label for="userName">UserName</label>
+                <label for="userName">Username</label>
                   <input formControlName="userName" type="text" class="form-control">
               </div>
               <div class="form-group text-left">
@@ -89,7 +89,7 @@
                   <input formControlName="speciality" type="text" class="form-control">
               </div>
               <div class="form-group text-left">
-                  <label for="practitionerPlaceOfWork">select a practice</label>
+                  <label for="practitionerPlaceOfWork">Select a practice</label>
                   <select class='select-option' class="form-control" required  formControlName='practitionerPlaceOfWork' (change)='onOptionSelected(practices[$event.target.selectedIndex])'>
                       <option class='option' *ngFor='let option of practices' [ngValue]="option.practiceId" >{{option.practiceName}}</option>
                   </select>
@@ -123,28 +123,28 @@
         <div class="modal-body">
 
           <div class="form-group text-left">
-            <label for="firstName">firstName</label>
+            <label for="firstName">First Name</label>
               <input [ngModel]="firstName"formControlName="firstName" type="text" class="form-control">
           </div>
             <div class="form-group text-left">
-              <label for="lastName">lastName</label>
+              <label for="lastName">Last Name</label>
                 <input [ngModel]="lastName"formControlName="lastName" type="text" class="form-control">
             </div>
           
             <div class="form-group text-left">
-              <label for="userName">userName</label>
+              <label for="userName">Username</label>
                 <input [ngModel]="userName"formControlName="userName" type="text" class="form-control">
             </div>
             <div class="form-group text-left">
-              <label for="registrationNumber">registrationNumber</label>
+              <label for="registrationNumber">Registration Number</label>
                 <input [ngModel]="registrationNumber"formControlName="registrationNumber" type="text" class="form-control">
             </div>
             <div class="form-group text-left">
-              <label for="speciality">speciality</label>
+              <label for="speciality">Speciality</label>
                 <input [ngModel]="speciality"formControlName="speciality" type="text" class="form-control">
             </div>
             <div class="form-group text-left">
-              <label for="assistant">assistant</label>
+              <label for="assistant">Assistant</label>
                 <input [ngModel]="assistant"formControlName="assistant" type="text" class="form-control">
             </div>
             <div class="form-group text-left">

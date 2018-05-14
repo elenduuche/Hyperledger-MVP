@@ -3,9 +3,9 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { MedicalPracticeService } from './MedicalPractice.service';
 import 'rxjs/add/operator/toPromise';
 @Component({
-	selector: 'app-MedicalPractice',
-	templateUrl: './MedicalPractice.component.html',
-	styleUrls: ['./MedicalPractice.component.css'],
+  selector: 'app-MedicalPractice',
+  templateUrl: './MedicalPractice.component.html',
+  styleUrls: ['./MedicalPractice.component.css'],
   providers: [MedicalPracticeService]
 })
 export class MedicalPracticeComponent implements OnInit {
@@ -15,27 +15,27 @@ export class MedicalPracticeComponent implements OnInit {
   private allAssets;
   private asset;
   private currentId;
-	private errorMessage;
+  private errorMessage;
 
-  
-      
-          practiceId = new FormControl("", Validators.required);
-        
-          practiceName = new FormControl("", Validators.required);
-        
-          practiceRegistrationNumber = new FormControl("", Validators.required);
 
-  constructor(private serviceMedicalPractice:MedicalPracticeService, fb: FormBuilder) {
+
+  practiceId = new FormControl("", Validators.required);
+
+  practiceName = new FormControl("", Validators.required);
+
+  practiceRegistrationNumber = new FormControl("", Validators.required);
+
+  constructor(private serviceMedicalPractice: MedicalPracticeService, fb: FormBuilder) {
     this.myForm = fb.group({
-    
-        
-          practiceId:this.practiceId,
-      
-          practiceName:this.practiceName,
-        
-          practiceRegistrationNumber:this.practiceRegistrationNumber
-        
-    
+
+
+      practiceId: this.practiceId,
+
+      practiceName: this.practiceName,
+
+      practiceRegistrationNumber: this.practiceRegistrationNumber
+
+
     });
   };
 
@@ -46,25 +46,25 @@ export class MedicalPracticeComponent implements OnInit {
   loadAll(): Promise<any> {
     let tempList = [];
     return this.serviceMedicalPractice.getAll()
-    .toPromise()
-    .then((result) => {
-			this.errorMessage = null;
-      result.forEach(asset => {
-        tempList.push(asset);
+      .toPromise()
+      .then((result) => {
+        this.errorMessage = null;
+        result.forEach(asset => {
+          tempList.push(asset);
+        });
+        this.allAssets = tempList;
+      })
+      .catch((error) => {
+        if (error == 'Server error') {
+          this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+        }
+        else if (error == '404 - Not Found') {
+          this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+        }
+        else {
+          this.errorMessage = error;
+        }
       });
-      this.allAssets = tempList;
-    })
-    .catch((error) => {
-        if(error == 'Server error'){
-            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-        }
-        else if(error == '404 - Not Found'){
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
-        }
-        else{
-            this.errorMessage = error;
-        }
-    });
   }
 
 	/**
@@ -95,198 +95,198 @@ export class MedicalPracticeComponent implements OnInit {
   addAsset(form: any): Promise<any> {
     this.asset = {
       $class: "org.medichain.mvp.MedicalPractice",
-      
-        
-          "practiceId": Math.floor((Math.random() * 100) + 1),
-        
-      
-        
-          "practiceName":this.practiceName.value,
-        
-      
-        
-          "practiceRegistrationNumber":this.practiceRegistrationNumber.value
-        
-      
+
+
+      "practiceId": Math.floor((Math.random() * 100) + 1),
+
+
+
+      "practiceName": this.practiceName.value,
+
+
+
+      "practiceRegistrationNumber": this.practiceRegistrationNumber.value
+
+
     };
 
     this.myForm.setValue({
-      
-        
-          "practiceId":null,
-        
-      
-        
-          "practiceName":null,
-        
-      
-        
-          "practiceRegistrationNumber":null
-        
-      
+
+
+      "practiceId": null,
+
+
+
+      "practiceName": null,
+
+
+
+      "practiceRegistrationNumber": null
+
+
     });
 
     return this.serviceMedicalPractice.addAsset(this.asset)
-    .toPromise()
-    .then(() => {
-			this.errorMessage = null;
-      this.myForm.setValue({
-      
-          "practiceId":null,
-        
-          "practiceName":null,
-        
-          "practiceRegistrationNumber":null 
-        
-      
-      });
-      this.loadAll();
-    })
-    .catch((error) => {
-        if(error == 'Server error'){
-            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-        }
-        else{
+      .toPromise()
+      .then(() => {
+        this.errorMessage = null;
+        this.myForm.setValue({
 
-            this.errorMessage = error;
+          "practiceId": null,
+
+          "practiceName": null,
+
+          "practiceRegistrationNumber": null
+
+
+        });
+        this.loadAll();
+      })
+      .catch((error) => {
+        if (error == 'Server error') {
+          this.errorMessage = "Could not connect to REST server. Please check your configuration details";
         }
-    });
+        else {
+
+          this.errorMessage = error;
+        }
+      });
   }
 
 
-   updateAsset(form: any): Promise<any> {
+  updateAsset(form: any): Promise<any> {
     this.asset = {
       $class: "org.medichain.mvp.MedicalPractice",
 
-            "practiceName":this.practiceName.value,
-          
-            "practiceRegistrationNumber":this.practiceRegistrationNumber.value
+      "practiceName": this.practiceName.value,
+
+      "practiceRegistrationNumber": this.practiceRegistrationNumber.value
     };
 
-    return this.serviceMedicalPractice.updateAsset(form.get("practiceId").value,this.asset)
-		.toPromise()
-		.then(() => {
-      this.errorMessage = null;
-      this.loadAll();
-		})
-		.catch((error) => {
-            if(error == 'Server error'){
-				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-			}
-            else if(error == '404 - Not Found'){
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
-			}
-			else{
-				this.errorMessage = error;
-			}
-    });
+    return this.serviceMedicalPractice.updateAsset(form.get("practiceId").value, this.asset)
+      .toPromise()
+      .then(() => {
+        this.errorMessage = null;
+        this.loadAll();
+      })
+      .catch((error) => {
+        if (error == 'Server error') {
+          this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+        }
+        else if (error == '404 - Not Found') {
+          this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+        }
+        else {
+          this.errorMessage = error;
+        }
+      });
   }
 
 
   deleteAsset(): Promise<any> {
 
     return this.serviceMedicalPractice.deleteAsset(this.currentId)
-		.toPromise()
-		.then(() => {
-      this.errorMessage = null;
-      this.loadAll();
-		})
-		.catch((error) => {
-            if(error == 'Server error'){
-				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-			}
-			else if(error == '404 - Not Found'){
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
-			}
-			else{
-				this.errorMessage = error;
-			}
-    });
+      .toPromise()
+      .then(() => {
+        this.errorMessage = null;
+        this.loadAll();
+      })
+      .catch((error) => {
+        if (error == 'Server error') {
+          this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+        }
+        else if (error == '404 - Not Found') {
+          this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+        }
+        else {
+          this.errorMessage = error;
+        }
+      });
   }
 
-  setId(id: any): void{
+  setId(id: any): void {
     this.currentId = id;
   }
 
-  getForm(id: any): Promise<any>{
+  getForm(id: any): Promise<any> {
 
     return this.serviceMedicalPractice.getAsset(id)
-    .toPromise()
-    .then((result) => {
-			this.errorMessage = null;
-      let formObject = {
-        
-          
-            "practiceId":null,
-          
-        
-          
-            "practiceName":null,
-          
-        
-          
-            "practiceRegistrationNumber":null 
-          
-        
-      };
+      .toPromise()
+      .then((result) => {
+        this.errorMessage = null;
+        let formObject = {
+
+
+          "practiceId": null,
 
 
 
-      
-        if(result.practiceId){
-          
-            formObject.practiceId = result.practiceId;
-          
-        }else{
+          "practiceName": null,
+
+
+
+          "practiceRegistrationNumber": null
+
+
+        };
+
+
+
+
+        if (result.practiceId) {
+
+          formObject.practiceId = result.practiceId;
+
+        } else {
           formObject.practiceId = null;
         }
-      
-        if(result.practiceName){
-          
-            formObject.practiceName = result.practiceName;
-          
-        }else{
+
+        if (result.practiceName) {
+
+          formObject.practiceName = result.practiceName;
+
+        } else {
           formObject.practiceName = null;
         }
-      
-        if(result.practiceRegistrationNumber){
-          
-            formObject.practiceRegistrationNumber = result.practiceRegistrationNumber;
-          
-        }else{
+
+        if (result.practiceRegistrationNumber) {
+
+          formObject.practiceRegistrationNumber = result.practiceRegistrationNumber;
+
+        } else {
           formObject.practiceRegistrationNumber = null;
         }
-      
 
-      this.myForm.setValue(formObject);
-      
-    })
-    .catch((error) => {
-        if(error == 'Server error'){
-            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+
+        this.myForm.setValue(formObject);
+
+      })
+      .catch((error) => {
+        if (error == 'Server error') {
+          this.errorMessage = "Could not connect to REST server. Please check your configuration details";
         }
-        else if(error == '404 - Not Found'){
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+        else if (error == '404 - Not Found') {
+          this.errorMessage = "404 - Could not find API route. Please check your available APIs."
         }
-        else{
-            this.errorMessage = error;
+        else {
+          this.errorMessage = error;
         }
-    });
+      });
 
   }
 
-  resetForm(): void{
+  resetForm(): void {
     this.myForm.setValue({
-      
-        
-          "practiceId":null,
-        
-          "practiceName":null,
 
-          "practiceRegistrationNumber":null 
-        
-      
-      });
+
+      "practiceId": null,
+
+      "practiceName": null,
+
+      "practiceRegistrationNumber": null
+
+
+    });
   }
 
 }

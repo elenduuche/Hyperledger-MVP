@@ -25,7 +25,7 @@ export const ROUTES: RouteInfo[] = [
     // { path: 'ImmunizationRecord', title: "Immunization Record", icon:'content_paste', class: ''},
 
     // { path: 'table-list', title: 'Medical Record',  icon:'content_paste', class: '' },
-    { path: 'upgrade', title: 'Upgrade to PRO',  icon:'unarchive', class: 'active-pro' },
+    // { path: 'upgrade', title: 'Upgrade to PRO',  icon:'unarchive', class: 'active-pro' },
 ];
 
 @Component({
