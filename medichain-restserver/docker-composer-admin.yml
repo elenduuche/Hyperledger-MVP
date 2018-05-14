@@ -2,7 +2,7 @@ version: '2'
 networks:
   composer_default:
 services:
-  medichain-rest-server:
+  medichain-rest-server-admin:
     image: medichain/medichain-composer-rest-server
     container_name: medichain-rest-server
     ports:
