@@ -26,37 +26,38 @@ export class LoginComponent implements OnInit {
   }
 
   submitCred(form: any): Promise<any> {
-    const url  =  'http://localhost:3000/auth/github';
+    const url = 'http://35.231.73.140:3000/auth/github';
     this.asset = {
-          'username': this.username.value,
+      'username': this.username.value,
     };
-       // Create login account and Insert card into mongodb
-     return this.loginService.ConfirmAccount(this.asset.username).then((data: any) => {
-         if (data != null) {
-         console.log('opening', url);
-          window.open(url, '_self');
-          //  this.http.get('http://localhost:3000/auth/github').subscribe(res => {
-          //  });
-           // Import Wallet
-          //resp; returns blob
-          // let token = '';
-          // this.serviceMedicalPractitioner.importWallet(resp, 'org.medichain.mvp', token).then((walletRes: any) => {
-          //   if (walletRes != null) {
-          //    console.log(walletRes);
-          //     } else {
-          //   }
-          // });
-           } else {
-         }
-       });
+    // Create login account and Insert card into mongodb
+    return this.loginService.ConfirmAccount(this.asset.username).then((data: any) => {
+      if (data != null) {
+        console.log('opening', url);
+        window.open(url, '_self');
+        //  this.http.get('http://localhost:3000/auth/github').subscribe(res => {
+        //  });
+        // Import Wallet
+        //resp; returns blob
+        // let token = '';
+        // this.serviceMedicalPractitioner.importWallet(resp, 'org.medichain.mvp', token).then((walletRes: any) => {
+        //   if (walletRes != null) {
+        //    console.log(walletRes);
+        //     } else {
+        //   }
+        // });
+      } else {
+        console.log("@Login.SubmitCred: Username was not found!");
+      }
+    });
   }
 
-   getCookie(name) {
+  getCookie(name) {
     let pattern = RegExp(name + '=.[^;]*')
     let matched = document.cookie.match(pattern)
     if (matched) {
-        let cookie = matched[0].split('=')
-        return cookie[1]
+      let cookie = matched[0].split('=')
+      return cookie[1]
     }
     return false
   }
