@@ -566,10 +566,10 @@ describe('#' + namespace, () => {
             const mpRegistry = await businessNetworkConnection.getParticipantRegistry(mpNS);
             const daRegistry = await businessNetworkConnection.getParticipantRegistry(daNS);
             //Get the Medical Practitioner and check that the authorized field has the accessorId
-            var drada = await mpRegistry.get('drada2018');
+            /* var drada = await mpRegistry.get('drada2018');
             //console.log('Dr Ada is:', drada);
             var idx = drada.authorized.indexOf('zenithadmin001');
-            idx.should.equal(0);
+            idx.should.equal(0); */
             //Get the DataAccessor and check that the authorized field has the patientId
             var zenithAdmin = await daRegistry.get('zenithadmin001');
             var idx0 = zenithAdmin.authorized.indexOf('patient001');
@@ -596,10 +596,10 @@ describe('#' + namespace, () => {
             const mpRegistry = await businessNetworkConnection.getParticipantRegistry(mpNS);
             const daRegistry = await businessNetworkConnection.getParticipantRegistry(daNS);
             //Get the Medical Practitioner and check that the authorized field has the accessorId
-            var drada = await mpRegistry.get('drada2018');
+            /* var drada = await mpRegistry.get('drada2018');
             //console.log('Dr Ada is:', drada);
             var idx = drada.authorized.indexOf('zenithadmin001');
-            idx.should.equal(-1);
+            idx.should.equal(-1); */
             //Get the DataAccessor and check that the authorized field has the patientId
             var zenithAdmin = await daRegistry.get('zenithadmin001');
             var idx0 = zenithAdmin.authorized.indexOf('patient001');

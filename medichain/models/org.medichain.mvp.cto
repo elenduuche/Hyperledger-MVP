@@ -259,7 +259,7 @@ transaction RevokeAccess extends PermissionControl {
 }
 
 event MemberAccessPermissionEvent {
-  --> MedicalPractitioner practitionerId
+  // --> MedicalPractitioner practitionerId
   --> DataAccessor accessorId
   --> Patient patientId
   o PermissionAction action

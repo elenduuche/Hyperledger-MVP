@@ -72,6 +72,41 @@ rule NetworkAdminSystem {
     action: ALLOW
 }
 
+rule AdminCanSubmitTransactions {
+    description: "Allow all participants to submit transactions"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: CREATE, READ
+    resource: "org.medichain.mvp.GrantAccess"
+    action: ALLOW
+}
+
+rule AdminCanSubmitRevokeTransactions {
+    description: "Allow all participants to submit transactions"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: CREATE, READ
+    resource: "org.medichain.mvp.RevokeAccess"
+    action: ALLOW
+}
+
+rule AdminReadPatientCanSubmitTransactions {
+    description: "Allow all participants to submit transactions"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: READ
+    resource: "org.medichain.mvp.Patient"
+    transaction: "org.medichain.mvp.GrantAccess"
+    action: ALLOW
+}
+
+rule AdminReadPatientCanSubmitRevokeTransactions {
+    description: "Allow all participants to submit transactions"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: READ
+    resource: "org.medichain.mvp.Patient"
+    transaction: "org.medichain.mvp.RevokeAccess"
+    action: ALLOW
+}
+
+
 /**
  * Access Control File for MediChain Network
  */
