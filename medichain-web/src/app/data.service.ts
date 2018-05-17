@@ -12,7 +12,8 @@ export class DataService<Type> {
     private headers: Headers;
 
     constructor(private http: Http, private _configuration: Configuration) {
-        this.actionUrl = _configuration.PublicWithApiUrl;
+        const isAdmin =  localStorage.getItem('IsAdmin');
+        this.actionUrl = isAdmin === 'true' ? _configuration.Medichain_BASEURL : _configuration.MedichainAuth_BASEURL;
         this.headers = new Headers();
         this.headers.append('Content-Type', 'application/json');
         this.headers.append('Accept', 'application/json');
@@ -71,7 +72,8 @@ export class DataService<Type> {
     }
 
     private extractData(res: Response): any {
-        return res.json();
+       return res.json();
+       // return res;
     }
 
 }

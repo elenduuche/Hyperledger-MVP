@@ -31,3 +31,22 @@ console.log('getProfile endpoint called by: ' + req.params.id)
   }
 
 };
+
+module.exports.updateProfilehasWalletStatus = function(req, res) {
+  console.log('updateProfilehasWalletStatus endpoint called by: ' + req.params.id)
+    if (!req.params.id) {
+      res.status(401).json({
+        "message" : "UnauthorizedError: no username specified"
+      });
+    } else {
+      User
+        .findOneAndUpdate({
+          query: { username: req.params.id },
+          update: { $inc: { hasWallet: true } }
+        })
+        .exec(function(err, user) {
+          res.status(200).json(user);
+        });
+    }
+  
+  };

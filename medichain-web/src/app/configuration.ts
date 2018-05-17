@@ -8,6 +8,7 @@ export class Configuration {
     public Server1: string = this.ApiIP + ':' + this.ApiPort1;
     public Server2: string = this.ApiIP + ':' + this.ApiPort2;
     public ApiUrl = '/api/';
-    public PrivateServerWithApiUrl = this.Server1 + this.ApiUrl;
-    public PublicWithApiUrl = this.Server2 + this.ApiUrl;
+    public MedichainAuth_BASEURL = this.Server1 + this.ApiUrl;
+    public Medichain_BASEURL = this.Server2 + this.ApiUrl;
+    public Auth_BASEURL = 'http://localhost:3002/api/';
 }

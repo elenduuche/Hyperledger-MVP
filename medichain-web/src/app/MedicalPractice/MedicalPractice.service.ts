@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DataAuthEnabledService } from '../data.authenabled.service';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
 import { MedicalPractice } from '../org.medichain.mvp';
@@ -12,7 +13,7 @@ export class MedicalPracticeService {
 		private NAMESPACE: string = 'org.medichain.mvp.MedicalPractice';
 	
 
-    constructor(private dataService: DataService<MedicalPractice>) {
+    constructor(private dataService: DataAuthEnabledService<MedicalPractice>) {
     };
 
     public getAll(): Observable<MedicalPractice[]> {

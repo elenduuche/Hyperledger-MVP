@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DataService } from '../data.service';
+import { DataAuthEnabledService } from '../data.authenabled.service';
 import { Observable } from 'rxjs/Observable';
 import { ProfileInformation } from '../org.medichain.mvp';
 import 'rxjs/Rx';
@@ -14,7 +14,7 @@ export class ProfileInformationService {
 
 
 
-    constructor(private dataService: DataService<ProfileInformation>) {
+    constructor(private dataService: DataAuthEnabledService<ProfileInformation>) {
     };
 
     public getAll(): Observable<ProfileInformation[]> {

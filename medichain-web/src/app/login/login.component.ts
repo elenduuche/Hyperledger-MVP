@@ -33,19 +33,10 @@ export class LoginComponent implements OnInit {
     // Create login account and Insert card into mongodb
     return this.loginService.ConfirmAccount(this.asset.username).then((data: any) => {
       if (data != null) {
+        var record = JSON.stringify(data);
+        localStorage.setItem('UserInfo', record);
         console.log('opening', url);
         window.open(url, '_self');
-        //  this.http.get('http://localhost:3000/auth/github').subscribe(res => {
-        //  });
-        // Import Wallet
-        //resp; returns blob
-        // let token = '';
-        // this.serviceMedicalPractitioner.importWallet(resp, 'org.medichain.mvp', token).then((walletRes: any) => {
-        //   if (walletRes != null) {
-        //    console.log(walletRes);
-        //     } else {
-        //   }
-        // });
       } else {
         console.log("@Login.SubmitCred: Username was not found!");
       }

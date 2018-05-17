@@ -2,11 +2,12 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { DataAccessorService } from './DataAccessor.service';
 import 'rxjs/add/operator/toPromise';
+import { GeneralService } from './../general.service';
 @Component({
   selector: 'app-DataAccessor',
 	templateUrl: './DataAccessor.component.html',
 	styleUrls: ['./DataAccessor.component.css'],
-  providers: [DataAccessorService]
+  providers: [DataAccessorService, GeneralService]
 })
 export class DataAccessorComponent implements OnInit {
 
@@ -21,7 +22,8 @@ export class DataAccessorComponent implements OnInit {
   userName = new FormControl('', Validators.required);
   memberId = new FormControl('', Validators.required);
   typeOfDataAccessor = new FormControl('', Validators.required);
-  constructor(private serviceDataAccessor: DataAccessorService, fb: FormBuilder) {
+  constructor(private serviceDataAccessor: DataAccessorService,
+    private generalService: GeneralService, fb: FormBuilder) {
     this.myForm = fb.group({
           userName: this.userName,
           memberId: this.memberId,
@@ -103,17 +105,23 @@ export class DataAccessorComponent implements OnInit {
       this.errorMessage = null;
       this.loadAll();
       this.successMessage = 'Record created successfully';
-      this.myForm.setValue({
-          'userName': null,
-          'memberId': null,
-          'typeOfDataAccessor': null,
-      }); 
+       // Create login account and Insert card into mongodb
+       var record = 'name=' + this.asset.userName + '&username='
+       + this.asset.userName + '&password=' + 'password'
+       + '&participant=' + 'org.medichain.mvp.DataAccessor'
+       + '&userID=' + this.asset.memberId + '&hasWallet=' + false;
+       this.myForm.setValue({
+        'userName': null,
+        'memberId': null,
+        'typeOfDataAccessor': null,
+    });
+     return this.generalService.submitUserAccount(record);
+
     })
     .catch((error) => {
         if (error === 'Server error') {
-            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-        }
-        else{
+            this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+        } else {
             this.errorMessage = error;
         }
     });
@@ -134,7 +142,7 @@ export class DataAccessorComponent implements OnInit {
       this.successMessage = 'Record updated successfully';
 		})
 		.catch((error) => {
-            if(error == 'Server error'){
+            if(error === 'Server error') {
 				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
 			}
             else if(error == '404 - Not Found'){
@@ -160,7 +168,7 @@ export class DataAccessorComponent implements OnInit {
             if(error == 'Server error'){
 				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
 			}
-			else if(error == '404 - Not Found'){
+			else if(error === '404 - Not Found'){
 				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
 			}
 			else{
@@ -169,16 +177,16 @@ export class DataAccessorComponent implements OnInit {
     });
   }
 
-  setId(id: any): void{
+  setId(id: any): void {
     this.currentId = id;
   }
 
-  getForm(id: any): Promise<any>{
+  getForm(id: any): Promise<any> {
 
     return this.serviceDataAccessor.getAsset(id)
     .toPromise()
     .then((result) => {
-			this.errorMessage = null;
+    this.errorMessage = null;
       let formObject = {
 
             'userName': null,

@@ -12,15 +12,15 @@ var userSchema = new mongoose.Schema({
     unique: true,
     required: true
   },
-  identity: {
-    type: Object,
+  participant: {
+    type: String,
     required: true
+  },
+  userID: {
+    type: Number
   },
   hasWallet: {
     type: Boolean
-  },
-  authtoken: {
-    type: String
   },
   hash: String,
   salt: String

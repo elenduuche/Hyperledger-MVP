@@ -1,150 +1,114 @@
 import { Component, OnInit } from '@angular/core';
-import * as Chartist from 'chartist';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MedicalPractitionerService } from './../MedicalPractitioner/MedicalPractitioner.service';
+import { GeneralService } from './../general.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
+  providers: [GeneralService, MedicalPractitionerService]
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
-  startAnimationForLineChart(chart){
-      let seq: any, delays: any, durations: any;
-      seq = 0;
-      delays = 80;
-      durations = 500;
+  private currentUser;
+  private authenticated = false;
+  private loggedIn = false;
+  constructor(private route: ActivatedRoute,
+              private router: Router, private generalService: GeneralService,
+              private serviceMedicalPractitioner: MedicalPractitionerService) { }
 
-      chart.on('draw', function(data) {
-        if(data.type === 'line' || data.type === 'area') {
-          data.element.animate({
-            d: {
-              begin: 600,
-              dur: 700,
-              from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
-              to: data.path.clone().stringify(),
-              easing: Chartist.Svg.Easing.easeOutQuint
-            }
-          });
-        } else if(data.type === 'point') {
-              seq++;
-              data.element.animate({
-                opacity: {
-                  begin: seq * delays,
-                  dur: durations,
-                  from: 0,
-                  to: 1,
-                  easing: 'ease'
-                }
-              });
-          }
-      });
+  ngOnInit() {
 
-      seq = 0;
-  };
-  startAnimationForBarChart(chart){
-      let seq2: any, delays2: any, durations2: any;
+    this.getCurrentUser().then((resp: any) => {
+      this.confirmUserAuth();
+   });
 
-      seq2 = 0;
-      delays2 = 80;
-      durations2 = 500;
-      chart.on('draw', function(data) {
-        if(data.type === 'bar'){
-            seq2++;
-            data.element.animate({
-              opacity: {
-                begin: seq2 * delays2,
-                dur: durations2,
-                from: 0,
-                to: 1,
-                easing: 'ease'
-              }
+  }
+
+    confirmUserAuth() {
+      const url = 'http://35.231.73.140:3000/auth/github';
+      let record = JSON.parse(localStorage.getItem('UserInfo'));
+      this.route
+      .queryParams
+      .subscribe((queryParams) => {
+        const loggedIn = queryParams['loggedIn'];
+        if (loggedIn) {
+          this.authenticated = true;
+          return this.router.navigate(['/'])
+            .then(() => {
+              record = JSON.parse(localStorage.getItem('UserInfo'));
+              if ((record != null) && (record.hasWallet === false)) {
+              return this.processIdentity(record);
+               }
             });
+         } else {
+          if ((record != null) && (record.hasWallet === false)) {
+            return this.processIdentity(record);
+           }
+         }
+     });
+
+    }
+     processIdentity(record) {
+       //Issue Identity
+      const identity = 'participant=' + record.participant + '#' + record.userID +
+      '&userID=' + record.memberId + '&options=' + '{}';
+      return this.generalService.issueIdentity(identity).then((identityResp: any) => {
+        if (identityResp != null) {
+       console.log('@Dashboard.issueIdentity request was succesful:');
+       let record = JSON.parse(localStorage.getItem('UserInfo'));
+        this.generalService.importWallet(identityResp);
+        this.generalService.updateUserWalletStatus(record.username)
+        }
+    })
+    .then(() => {
+             this.checkWallet();
+      //    //Update hasWallet status of User record in MongoDb
+    })
+    .catch(() => {
+      return this.getCurrentUser()
+      .then((resp: any) => {
+        if (resp.participant !== 'org.hyperledger.composer.system.NetworkAdmin#admin') {
+          return this.router.navigate(['/login'])
         }
       });
+//    //Update hasWallet status of User record in MongoDb
+     });
+  }
 
-      seq2 = 0;
-  };
-  ngOnInit() {
-      /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
+     //Import wallet
+    //  this.generalService.importWallet(identityResp).then((walletResp: any) => {
+    //   if (walletResp != null) {
+    //    console.log('@Dashboard.importWallet response:' + walletResp);
+    //    //Update hasWallet status of User record in MongoDb
+    //     }
+    // });
 
-      const dataDailySalesChart: any = {
-          labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-          series: [
-              [12, 17, 7, 17, 23, 18, 38]
-          ]
-      };
+  checkWallet() {
+    return this.generalService.checkWallet()
+      .then((results) => {
+        if (results['length'] > 0) {
+          this.loggedIn = true;
+          return this.getCurrentUser()
+            .then(() => {
+             //this.loadAll();
+            });
+         }
+      });
+  }
 
-     const optionsDailySalesChart: any = {
-          lineSmooth: Chartist.Interpolation.cardinal({
-              tension: 0
-          }),
-          low: 0,
-          high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: { top: 0, right: 0, bottom: 0, left: 0},
-      }
-
-      var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
-
-      this.startAnimationForLineChart(dailySalesChart);
-
-
-      /* ----------==========     Completed Tasks Chart initialization    ==========---------- */
-
-      const dataCompletedTasksChart: any = {
-          labels: ['12p', '3p', '6p', '9p', '12p', '3a', '6a', '9a'],
-          series: [
-              [230, 750, 450, 300, 280, 240, 200, 190]
-          ]
-      };
-
-     const optionsCompletedTasksChart: any = {
-          lineSmooth: Chartist.Interpolation.cardinal({
-              tension: 0
-          }),
-          low: 0,
-          high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: { top: 0, right: 0, bottom: 0, left: 0}
-      }
-
-      var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
-
-      // start animation for the Completed Tasks Chart - Line Chart
-      this.startAnimationForLineChart(completedTasksChart);
-
-
-
-      /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
-
-      var datawebsiteViewsChart = {
-        labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
-        series: [
-          [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
-
-        ]
-      };
-      var optionswebsiteViewsChart = {
-          axisX: {
-              showGrid: false
-          },
-          low: 0,
-          high: 1000,
-          chartPadding: { top: 0, right: 5, bottom: 0, left: 0}
-      };
-      var responsiveOptions: any[] = [
-        ['screen and (max-width: 640px)', {
-          seriesBarDistance: 5,
-          axisX: {
-            labelInterpolationFnc: function (value) {
-              return value[0];
-            }
-          }
-        }]
-      ];
-      var websiteViewsChart = new Chartist.Bar('#websiteViewsChart', datawebsiteViewsChart, optionswebsiteViewsChart, responsiveOptions);
-
-      //start animation for the Emails Subscription Chart
-      this.startAnimationForBarChart(websiteViewsChart);
+  getCurrentUser() {
+    return this.generalService.getCurrentUser()
+      .then((currentUser) => {
+        this.currentUser = currentUser;
+        const isAdmin = this.currentUser.indexOf('org.hyperledger.composer.system.NetworkAdmin#admin') !== -1;
+       if (isAdmin) {
+        localStorage.setItem('IsAdmin', 'true');
+       } else {
+        localStorage.setItem('IsAdmin', 'false');
+       }
+     });
   }
 
 }

@@ -368,7 +368,7 @@ export class ProfileInformationComponent implements OnInit {
     .toPromise()
     .then(() => {
       this.errorMessage = null;
-      
+      this.loadAll();
 
       this.myForm.setValue({
       

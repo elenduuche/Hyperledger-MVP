@@ -30,6 +30,7 @@ import { LoginComponent } from './login/login.component';
 import { Configuration } from './configuration';
 import { DataService } from './data.service';
 import { DataAuthEnabledService } from './data.authenabled.service';
+import { GeneralService } from './general.service';
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
 import { ProfileInformationComponent } from './ProfileInformation/ProfileInformation.component';
@@ -93,9 +94,9 @@ import {
   providers: [
     Configuration,
     DataService,
-    DataAuthEnabledService
+    DataAuthEnabledService,
+    GeneralService
   ],
   bootstrap: [AppComponent]
-  
 })
 export class AppModule { }

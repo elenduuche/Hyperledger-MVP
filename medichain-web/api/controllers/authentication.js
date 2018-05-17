@@ -20,7 +20,8 @@ module.exports.register = function(req, res) {
 
   user.name = req.body.name;
   user.username = req.body.username;
-  user.identity = req.body.identity;
+  user.participant = req.body.participant;
+  user.userID = req.body.userID;
   user.hasWallet = req.body.hasWallet;
   user.authtoken = req.body.authtoken;
 

@@ -2,12 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MedicalPractitionerService } from './MedicalPractitioner.service';
 import { MedicalPracticeService } from './../MedicalPractice/MedicalPractice.service';
+import { GeneralService } from './../general.service';
 import 'rxjs/add/operator/toPromise';
 @Component({
   selector: 'app-medicalpractitioner',
   templateUrl: './MedicalPractitioner.component.html',
   styleUrls: ['./MedicalPractitioner.component.css'],
-  providers: [MedicalPractitionerService, MedicalPracticeService]
+  providers: [GeneralService, MedicalPractitionerService, MedicalPracticeService]
 })
 export class MedicalPractitionerComponent implements OnInit {
 
@@ -28,7 +29,8 @@ export class MedicalPractitionerComponent implements OnInit {
   practitionerPlaceOfWork = new FormControl('', Validators.required);
   //  private practitionerPlaceOfWork: any;
   constructor(private serviceMedicalPractitioner: MedicalPractitionerService,
-    private serviceMedicalPracticeService: MedicalPracticeService, fb: FormBuilder) {
+    private serviceMedicalPracticeService: MedicalPracticeService,
+    private generalService: GeneralService, fb: FormBuilder) {
     this.myForm = fb.group({
       firstName: this.firstName,
       lastName: this.lastName,
@@ -164,46 +166,13 @@ export class MedicalPractitionerComponent implements OnInit {
         this.errorMessage = null;
 
         this.loadAll();
-        //issue an Identity
-        const identity = 'participant=' + 'org.medichain.mvp.MedicalPractitioner#' + this.asset.memberId +
-          '&userID=' + this.asset.memberId + '&options=' + '{}';
-        /* this.serviceMedicalPractitioner.issueIdentity(identity).then((resp: any) => {
-          if (resp != null) {
-            this.myForm.setValue({
-              'firstName': null,
-              'lastName': null,
-              'userName': null,
-              'registrationNumber': null,
-              'speciality': null,
-              'assistant': null,
-              'memberId': null,
-              'practicionerPlaceOfWork': null,
-            });
-            // Create login account and Insert card into mongodb
-            var record = 'name=' + this.asset.firstName + '&username='
-              + this.asset.userName + '&password=' + 'password'
-              + '&identity=' + resp + '&hasWallet=' + false + '&authtoken=' + '';
-            this.serviceMedicalPractitioner.submitUserAccount(record).then((data: any) => {
-              if (data != null) {
-                localStorage.setItem('userToken', data.token);
 
-              } else {
-              }
-            });
-
-            // Import Wallet
-            //resp; returns blob
-            // let token = '';
-            // this.serviceMedicalPractitioner.importWallet(resp, 'org.medichain.mvp', token).then((walletRes: any) => {
-            //   if (walletRes != null) {
-            //    console.log(walletRes);
-            //    } else {
-            //   }
-            // });
-          }
-        }); */
-        return this.serviceMedicalPractitioner.issueIdentity(identity);
-
+           // Create login account and Insert card into mongodb
+           var record = 'name=' + this.asset.firstName + '&username='
+           + this.asset.userName + '&password=' + 'password'
+           + '&participant=' + 'org.medichain.mvp.MedicalPractitioner'
+           + '&userID=' + this.asset.memberId + '&hasWallet=' + false;
+         return this.generalService.submitUserAccount(record);
       })
       .then((resp: any) => {
         if (resp != null) {
@@ -217,31 +186,9 @@ export class MedicalPractitionerComponent implements OnInit {
             'memberId': null,
             'practicionerPlaceOfWork': null,
           });
-          // Create login account and Insert card into mongodb
-          var record = 'name=' + this.asset.firstName + '&username='
-            + this.asset.userName + '&password=' + 'password'
-            + '&identity=' + resp + '&hasWallet=' + false + '&authtoken=' + '';
-          /* this.serviceMedicalPractitioner.submitUserAccount(record).then((data: any) => {
-            if (data != null) {
-              localStorage.setItem('userToken', data.token);
-
-            } else {
-            }
-          }); */
-          return this.serviceMedicalPractitioner.submitUserAccount(record);
-          // Import Wallet
-          //resp; returns blob
-          // let token = '';
-          // this.serviceMedicalPractitioner.importWallet(resp, 'org.medichain.mvp', token).then((walletRes: any) => {
-          //   if (walletRes != null) {
-          //    console.log(walletRes);
-          //    } else {
-          //   }
-          // });
         }
-        //-------
       })
-      .then((data: any)=>{
+      .then((data: any) => {
         if (data != null) {
           localStorage.setItem('userToken', data.token);
 

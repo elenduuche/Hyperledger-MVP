@@ -11,9 +11,13 @@ export class DataAuthEnabledService<Type> {
     private resolveSuffix = '?resolve=true';
     private actionUrl: string;
     private headers: Headers;
+    private currentUser;
+    private isAdmin;
 
-    constructor(private http: Http, private httpClient: HttpClient, private _configuration: Configuration) {
-        this.actionUrl = _configuration.PrivateServerWithApiUrl;
+    constructor(private http: Http, private httpClient: HttpClient,
+        private _configuration: Configuration) {
+        const isAdmin =  localStorage.getItem('IsAdmin');
+        this.actionUrl = isAdmin === 'true' ? _configuration.Medichain_BASEURL : _configuration.MedichainAuth_BASEURL;
         this.headers = new Headers();
         this.headers.append('Content-Type', 'application/json');
         this.headers.append('Accept', 'application/json');
@@ -72,7 +76,8 @@ export class DataAuthEnabledService<Type> {
     }
 
     private extractData(res: Response): any {
-        return res.json();
+       // return res.json();
+        return res;
     }
 
 }

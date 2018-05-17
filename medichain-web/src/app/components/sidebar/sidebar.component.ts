@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -13,7 +14,7 @@ export const ROUTES: RouteInfo[] = [
     { path: 'MedicalPractice', title: 'Medical Practice', icon: 'content_paste', class: ''},
     { path: 'DataAccessor', title: 'Data Accessor', icon: 'how_to_reg', class: ''},
     { path: 'ProfileInformation', title: 'Patient Profile', icon: 'verified_user', class: ''},
-    { path: 'Access', title: 'Grant Access', icon: 'verified_user', class: ''},
+    { path: 'Access', title: 'Grant Access', icon: 'security', class: ''},
     // { path: 'PatientMasterData', title: "Patient Master", icon:'content_paste', class: ''},
     
     // { path: 'Prescription', title: "Prescription", icon:'content_paste', class: ''},
@@ -36,7 +37,7 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
   menuItems: any[];
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
@@ -47,4 +48,26 @@ export class SidebarComponent implements OnInit {
       }
       return true;
   };
+
+  signOut() {
+      localStorage.clear();
+      this.deleteAllCookies();
+      return this.router.navigate(['/login'])
+  }
+
+  deleteAllCookies() {
+    var cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      deleteCookie(cookies[i].split('=')[0]);
+    }
+    function deleteCookie(name) {
+        setCookie(name, '', -1);
+      }
+      function setCookie(name, value, expirydays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (expirydays * 24 * 60 * 60 * 1000));
+        let expires = 'expires=' + d.toUTCString();
+        document.cookie = name + '=' + value + '; ' + expires;
+       }
+ }
 }
