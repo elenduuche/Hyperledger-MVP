@@ -23,6 +23,14 @@ rule EverybodyCanReadEverything {
     action: ALLOW
 }
 
+rule AdminCanReadEverything {
+    description: "Allow all participants read access to all resources"
+    participant: "org.hyperledger.composer.system.Participant"
+    operation: ALL
+    resource: "org.medichain.mvp.*"
+    action: ALLOW
+}
+
 rule EverybodyCanSubmitTransactions {
     description: "Allow all participants to submit transactions"
     participant: "org.medichain.mvp.SampleParticipant"
@@ -110,6 +118,14 @@ rule MedicalPractitionerOp {
     operation: CREATE, UPDATE, READ
     resource(r): "org.medichain.mvp.MedicalPractitioner"
     condition: (r.getIdentifier() == p.getIdentifier())
+    action: ALLOW
+}
+
+rule MedicalPractitionerProfileInformation {
+    description: "Allow medical practitioner to update medical practitioner resource"
+    participant: "org.medichain.mvp.MedicalPractitioner"
+    operation: CREATE, UPDATE, READ
+    resource: "org.medichain.mvp.ProfileInformation"
     action: ALLOW
 }
 
